@@ -29,9 +29,9 @@ public class Users {
 		int resultCount = 0;
 		if (amount.equals("ALL")) {
 			String sql = "select u.name, u.login, sum(t.isTrusted) AS TotalTrust From Trust t, Users u where t.login2 = u.login"
-					+ " group by u.name, having sum(t.isTrusted) > 0 order by TotalTrust desc";
+					+ " group by u.login having sum(t.isTrusted) > 0 order by TotalTrust desc";
 			try {
-				st.executeQuery(sql);
+				rs = st.executeQuery(sql);
 				while (rs.next()) {
 					trusted = new String[3];
 					trusted[0] = rs.getString("name");
@@ -55,7 +55,7 @@ public class Users {
 		} else {
 			int newAmo = Integer.parseInt(amount);
 			String sql = "select u.name, u.login, sum(t.isTrusted) AS TotalTrust From Trust t, Users u where t.login2 = u.login"
-					+ " group by u.name, having sum(t.isTrusted) > 0 order by TotalTrust desc limit " + newAmo;
+					+ " group by u.login having sum(t.isTrusted) > 0 order by TotalTrust desc limit " + newAmo;
 			try {
 				st.executeQuery(sql);
 				while (rs.next()) {
