@@ -77,17 +77,19 @@ public class TH {
 			while (rs.next()) {
 				categories.add(rs.getString("category"));
 			}
-		}
+		} catch (SQLException e) {
 
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
+
 		return categories;
 	}
 
 	public ArrayList<String[]> getPopularTHs(String amount, Statement st) {
 		ArrayList<String[]> forReturn = new ArrayList<String[]>();
 		ArrayList<String> catagoryList = new ArrayList<String>();
+		String[] arr;
 		ResultSet rs = null;
 		int limit;
 		String sql;
@@ -105,13 +107,55 @@ public class TH {
 
 			for (String s : catagoryList) {
 				sql = "select t.name, t.category, count(*) AS VisitCount from TH t, "
-						+ "Visit v, Reserve r where t.h_id = r.h_id and t.category = "
-						+ s + " and r.r_id = v.r_id group by t.name order by VisitCount desc";
-				
+						+ "Visit v, Reserve r where t.h_id = r.h_id and t.category = " + s
+						+ " and r.r_id = v.r_id group by t.name order by VisitCount desc";
+				rs = null;
+				try {
+					rs = st.executeQuery(sql);
+					while (rs.next()) {
+						arr = new String[3];
+						arr[0] = rs.getString("name");
+						arr[1] = rs.getString("category");
+						arr[2] = String.valueOf(rs.getInt("VisitCount"));
+						forReturn.add(arr);
+					}
+					rs.close();
+				} catch (SQLException e) {
+
+				}
 			}
 
 		} else {
 			limit = Integer.parseInt(amount);
+			sql = "select category from TH group by category";
+			try {
+				rs = st.executeQuery(sql);
+				while (rs.next()) {
+					catagoryList.add(rs.getString("category"));
+				}
+			} catch (Exception e) {
+
+			}
+
+			for (String s : catagoryList) {
+				sql = "select t.name, t.category, count(*) AS VisitCount from TH t, "
+						+ "Visit v, Reserve r where t.h_id = r.h_id and t.category = " + s
+						+ " and r.r_id = v.r_id group by t.name order by VisitCount desc limit" + limit;
+				rs = null;
+				try {
+					rs = st.executeQuery(sql);
+					while (rs.next()) {
+						arr = new String[3];
+						arr[0] = rs.getString("name");
+						arr[1] = rs.getString("category");
+						arr[2] = String.valueOf(rs.getInt("VisitCount"));
+						forReturn.add(arr);
+					}
+					rs.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return forReturn;
 

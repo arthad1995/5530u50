@@ -10,8 +10,8 @@ public class Users {
 
 	public void newUser(String login, String name, String userType, String contact_Num, String Address, String password,
 			Statement st) {
-		String sql = "insert into Users (login, name, userType, contact__Num, Address, password) " + "Values (" + login
-				+ ", " + name + ", " + userType + ", " + contact_Num + ", " + Address + ", " + password + ");";
+		String sql = "insert into Users (login, name, userType, contact__Num, Address, password) " + "Values ('" + login
+				+ "', '" + name + "', '" + userType + "', '" + contact_Num + "', '" + Address + "', '" + password + "');";
 		try {
 			st.executeUpdate(sql);
 		} catch (SQLException e) {
@@ -91,8 +91,8 @@ public class Users {
 		else
 			trustVal = -1;
 
-		String sql = "insert into Trust (login1, login2, isTrusted)" + " values (" + login1 + ", " + login2 + ", "
-				+ trustVal + ");";
+		String sql = "insert into Trust (login1, login2, isTrusted)" + " values ('" + login1 + "', '" + login2 + "', '"
+				+ trustVal + "');";
 		try {
 			st.executeUpdate(sql);
 		} catch (SQLException e) {
@@ -107,7 +107,7 @@ public class Users {
 		int loginCount = 0;
 
 		// ArrayList<String> login = new ArrayList<String>();
-		String sql = "select login from Users where name = " + name + " AND contact_Num = " + contact_Num + ";";
+		String sql = "select login from Users where name = '" + name + "' AND contact_Num = '" + contact_Num + "';";
 		try {
 			rs = st.executeQuery(sql);
 			while (rs.next()) {
@@ -115,7 +115,7 @@ public class Users {
 				login = rs.getString("login");
 				loginCount++;
 			}
-			if (loginCount == 0)
+			if (loginCount == 0 || login.equals(""))
 				return ""; // No result founded
 			rs.close();
 			// if (login.size() < 1)
@@ -141,7 +141,7 @@ public class Users {
 		// f2.login from Favorites f2 where f1.login != f2.login and f1.hid =
 		// f2.hid);
 		String sql = "select u.name from Users u, Favorites f1 where exists (select f2.login from Favorites where "
-				+ nameALogin + " = f1.login and f1.login != f2.login and f1.hid = f2.hid;";
+				+ "f1.login = '" + nameALogin + "' and f1.login != f2.login and f1.hid = f2.hid;";
 		ResultSet rs = null;
 		try {
 			rs = st.executeQuery(sql);

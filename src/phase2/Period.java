@@ -10,7 +10,7 @@ public class Period {
 	}
 
 	public void addPeriod(int p_id, Date from, Date to, Statement st) {
-		String sql = "insert into Period (p_id, from, to) Values (" + p_id + ", " + from + ", " + to + ");";
+		String sql = "insert into Period (p_id, from, to) Values (" + p_id + ", '" + from + "', '" + to + "');";
 		try {
 			st.executeUpdate(sql);
 		} catch (SQLException e) {
