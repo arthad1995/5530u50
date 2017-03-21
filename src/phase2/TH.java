@@ -1,5 +1,6 @@
 package phase2;
 
+import java.util.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Locale.Category;
@@ -106,17 +107,18 @@ public class TH {
 			}
 
 			for (String s : catagoryList) {
-				sql = "select t.name, t.category, count(*) AS VisitCount from TH t, "
-						+ "Visit v, Reserve r where t.h_id = r.h_id and t.category = " + s
-						+ " and r.r_id = v.r_id group by t.name order by VisitCount desc";
+				sql = "select t.h_id, t.name, t.category, count(*) AS VisitCount from TH t, "
+						+ "Visit v, Reserve r where t.h_id = r.h_id and t.category = '" + s
+						+ "' and r.r_id = v.r_id group by t.name order by VisitCount desc";
 				rs = null;
 				try {
 					rs = st.executeQuery(sql);
 					while (rs.next()) {
-						arr = new String[3];
-						arr[0] = rs.getString("name");
-						arr[1] = rs.getString("category");
-						arr[2] = String.valueOf(rs.getInt("VisitCount"));
+						arr = new String[4];
+						arr[0] = String.valueOf(rs.getInt("h_id"));
+						arr[1] = rs.getString("name");
+						arr[2] = rs.getString("category");
+						arr[3] = String.valueOf(rs.getInt("VisitCount"));
 						forReturn.add(arr);
 					}
 					rs.close();
@@ -138,17 +140,18 @@ public class TH {
 			}
 
 			for (String s : catagoryList) {
-				sql = "select t.name, t.category, count(*) AS VisitCount from TH t, "
-						+ "Visit v, Reserve r where t.h_id = r.h_id and t.category = " + s
-						+ " and r.r_id = v.r_id group by t.name order by VisitCount desc limit" + limit;
+				sql = "select t.h_id, t.name, t.category, count(*) AS VisitCount from TH t, "
+						+ "Visit v, Reserve r where t.h_id = r.h_id and t.category = '" + s
+						+ "' and r.r_id = v.r_id group by t.name order by VisitCount desc limit " + limit;
 				rs = null;
 				try {
 					rs = st.executeQuery(sql);
 					while (rs.next()) {
-						arr = new String[3];
-						arr[0] = rs.getString("name");
-						arr[1] = rs.getString("category");
-						arr[2] = String.valueOf(rs.getInt("VisitCount"));
+						arr = new String[4];
+						arr[0] = String.valueOf(rs.getInt("h_id"));
+						arr[1] = rs.getString("name");
+						arr[2] = rs.getString("category");
+						arr[3] = String.valueOf(rs.getInt("VisitCount"));
 						forReturn.add(arr);
 					}
 					rs.close();
@@ -158,7 +161,45 @@ public class TH {
 			}
 		}
 		return forReturn;
-
 	}
 
+	public ArrayList<String[]> getSuggestion(String login, int h_id, String amount, Statement st) {
+		ArrayList<Integer> suggestionList = new ArrayList<Integer>();
+		ArrayList<String[]> tempList = new ArrayList<String[]>();
+		String sql = "select r.h_id from Reserve r, Visit v where r.login = '" + login + "' and r.r_id = v.r_id;";
+		ResultSet rs = null;
+		try {
+			rs = st.executeQuery(sql);
+			while (rs.next()) {
+				if (rs.getInt("h_id") != h_id) {
+					suggestionList.add(rs.getInt("h_id"));
+				}
+			}
+
+		} catch (SQLException e) {
+
+		}
+		ArrayList<String[]> popularList = new ArrayList<String[]>();
+		List<Integer> getSort = new ArrayList<Integer>();
+		tempList = getPopularTHs(amount, st);
+		for (int i = 0; i < tempList.size(); i++) {
+			int hid = Integer.parseInt((tempList.get(i))[0]);
+			if (hid == suggestionList.get(i)) {
+				popularList.add(tempList.get(i));
+				getSort.add(Integer.parseInt((tempList.get(i)[3])));
+			}
+		}
+		Collections.sort(getSort, Collections.reverseOrder());
+		ArrayList<String[]> popularLists = new ArrayList<String[]>();
+		if (popularList.size() == getSort.size()) {
+			for (int i = 0; i < popularList.size(); i++) {
+				for (int j = 0; j < popularList.size(); j++) {
+					if (Integer.parseInt((popularList.get(j))[3]) == getSort.get(i)) {
+						popularLists.add(popularList.get(i));
+					}
+				}
+			}
+		}
+		return popularLists;
+	}
 }
