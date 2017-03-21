@@ -175,6 +175,7 @@ public class TH {
 					suggestionList.add(rs.getInt("h_id"));
 				}
 			}
+			rs.close();
 
 		} catch (SQLException e) {
 
