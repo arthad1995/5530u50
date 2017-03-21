@@ -203,4 +203,68 @@ public class TH {
 		}
 		return popularLists;
 	}
+
+	public ArrayList<String> filter(String field, int min, int max, String value, String sort, String increase,
+			Statement stmt) {
+		ArrayList<String> result = new ArrayList<String>();
+		if (field.equals("Price")) {
+			ResultSet rs = null;
+			String sql = "select * from TH" + " where Price< " + max + " and price< " + min;
+			if (sort.equals("p")) {
+				sql = sql + " order by " + "Price" + increase + ";";
+			} else if (sort.equals("s")) {
+				sql = sql + " group by (h_id) having (select h_id, AVG(score) AS average)"
+						+ "from Feedback group by h_id)" + "order by average " + increase + ";";
+			} else if (sort.equals("st")) {
+				sql = "select * from TH th ,Trust t, Users u,Feedback f where t.login2 = u.login and "
+						+ "f.login = t.login2" + "Price< " + max + " and price< " + min + " group by (f.h_id) having "
+						+ " (select h_id, AVG(score) AS average" + "where sum(t.isTrusted) > 0" + "order by average "
+						+ increase + ";";
+			}
+			try {
+				rs = stmt.executeQuery(sql);
+				while (rs.next()) {
+					result.add(rs.getString("h_id") + rs.getString("login") + "\t" + "\t" + rs.getString("category")
+							+ "\t" + rs.getString("address") + "\t" + rs.getString("city") + "\t"
+							+ rs.getString("state") + "\t" + rs.getString("price") + "\t" + rs.getString("name") + "\t"
+							+ rs.getString("telephone") + "\t" + rs.getString("keyword") + "\t"
+							+ rs.getString("yearBuilt") + "\t" + rs.getString("url") + "\t");
+				}
+			}
+
+			catch (Exception e) {
+				System.err.println(e.getMessage());
+			}
+			return result;
+		} else {
+			ResultSet rs = null;
+			String sql = "select * from TH" + " where " + field + " = " + value;
+			if (sort.equals("p")) {
+				sql = sql + " order by " + "Price" + increase + ";";
+			} else if (sort.equals("s")) {
+				sql = sql + " group by (h_id) having (select h_id, AVG(score) AS average)"
+						+ "from Feedback group by h_id)" + "order by average " + increase + ";";
+			} else if (sort.equals("st")) {
+				sql = "select * from TH th ,Trust t, Users u,Feedback f where t.login2 = u.login and "
+						+ "f.login = t.login2" + field + " = " + value + " group by (f.h_id) having "
+						+ " (select h_id, AVG(score) AS average" + "where sum(t.isTrusted) > 0" + "order by average "
+						+ increase + ";";
+			}
+			try {
+				rs = stmt.executeQuery(sql);
+				while (rs.next()) {
+					result.add(rs.getString("h_id") + rs.getString("login") + "\t" + "\t" + rs.getString("category")
+							+ "\t" + rs.getString("address") + "\t" + rs.getString("city") + "\t"
+							+ rs.getString("state") + "\t" + rs.getString("price") + "\t" + rs.getString("name") + "\t"
+							+ rs.getString("telephone") + "\t" + rs.getString("keyword") + "\t"
+							+ rs.getString("yearBuilt") + "\t" + rs.getString("url") + "\t");
+				}
+			}
+
+			catch (Exception e) {
+				System.err.println(e.getMessage());
+			}
+			return result;
+		}
+	}
 }
