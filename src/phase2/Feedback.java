@@ -127,6 +127,58 @@ private boolean checkGive(String h_id, String login, Statement stmt) {
 	 	}
 		return false;
 	}
+	public ArrayList<String> getrate(String h_id, String amount, Statement stmt) {
+		ArrayList<String> result = new ArrayList<String> ();
+		
+		
+		// Rating query
+		if(amount.equals("all")) {
+			String sql="select distinct r.login, AVG(r.rating) as averageRating from Rates r"
+					+    " group by (r.login)"
+					+    " order by averageRating" + "';";
+			
+			ResultSet rs = null;
+		 	try {
+		 		rs = stmt.executeQuery(sql);
+		 		while (rs.next()) {
+		 			String temp="";
+		 			temp = rs.getString("text") + "\t" + rs.getString("score");
+		 			result.add(temp);
+		 		}
+		 		return result;
+		 	}
+		 	catch(Exception e) {
+		 		
+		 		System.err.println(e.getMessage());
+		 	}		
+			return result;
+		}
+		else {
+			int count = Integer.parseInt(amount);
+			String sql = "select distinct f.text, f.score from Rates r, Feedback f"
+					+    " where f.fid IN (select AVG(rating) as average,f_id from "
+					+ "Feedback where h_id = '" +h_id +"')"
+					+    " order by average"
+					+    " limit " +count +";";
+			
+			ResultSet rs = null;
+//			System.out.println("executing "+sql);
+		 	try {
+		 		rs = stmt.executeQuery(sql);
+		 		while (rs.next()) {
+		 			String temp;
+		 			temp = rs.getString("text") + "\t" + rs.getString("score");		 			
+		 			result.add(temp);
+		 		}
+		 		return result;
+		 	}
+		 	catch(Exception e) { 		
+		 		System.err.println(e.getMessage());
+		 	}
+		
+			return result;
+		}
+	}
 	private boolean checkRate(int f_id,String login, Statement stmt) {
 		
 

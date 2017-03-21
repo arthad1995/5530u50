@@ -163,6 +163,26 @@ public class TH {
 		return forReturn;
 	}
 
+	public ArrayList<String> getHighestRate(int amount, Statement stmt){
+		ArrayList<String> result = new ArrayList<String>();
+		
+		String sql = "select * from TH t, "
+				+ "Feedback f where t.h_id = f.h_id group by category" + 
+				 "having (select AVG(f.score) as average order by (average) limit " + amount + ")" + ";";
+		ResultSet rs = null;
+		try {
+			rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				
+				//result.add(arr);
+			}
+			rs.close();
+		} catch (SQLException e) {
+
+		}
+	
+		return result;
+	}
 	public ArrayList<String[]> getSuggestion(String login, int h_id, String amount, Statement st) {
 		ArrayList<Integer> suggestionList = new ArrayList<Integer>();
 		ArrayList<String[]> tempList = new ArrayList<String[]>();
