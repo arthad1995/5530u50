@@ -109,7 +109,7 @@ public class TH {
 			for (String s : catagoryList) {
 				sql = "select t.h_id, t.name, t.category, count(*) AS VisitCount from TH t, "
 						+ "Visit v, Reserve r where t.h_id = r.h_id and t.category = '" + s
-						+ "' and r.r_id = v.r_id group by t.name order by VisitCount desc";
+						+ "' and r.r_id = v.r_id group by t.name order by t.category, VisitCount desc";
 				rs = null;
 				try {
 					rs = st.executeQuery(sql);
@@ -142,7 +142,7 @@ public class TH {
 			for (String s : catagoryList) {
 				sql = "select t.h_id, t.name, t.category, count(*) AS VisitCount from TH t, "
 						+ "Visit v, Reserve r where t.h_id = r.h_id and t.category = '" + s
-						+ "' and r.r_id = v.r_id group by t.name order by VisitCount desc limit " + limit;
+						+ "' and r.r_id = v.r_id group by t.name order by t.category, VisitCount desc limit " + limit;
 				rs = null;
 				try {
 					rs = st.executeQuery(sql);
@@ -161,6 +161,47 @@ public class TH {
 			}
 		}
 		return forReturn;
+	}
+
+	public ArrayList<String[]> getSuggestion(String login, int h_id, String amount, Statement st) {
+		ArrayList<Integer> suggestionList = new ArrayList<Integer>();
+		ArrayList<String[]> tempList = new ArrayList<String[]>();
+		String sql = "select r.h_id from Reserve r, Visit v where r.login = '" + login + "' and r.r_id = v.r_id;";
+		ResultSet rs = null;
+		try {
+			rs = st.executeQuery(sql);
+			while (rs.next()) {
+				if (rs.getInt("h_id") != h_id) {
+					suggestionList.add(rs.getInt("h_id"));
+				}
+			}
+			rs.close();
+
+		} catch (SQLException e) {
+
+		}
+		ArrayList<String[]> popularList = new ArrayList<String[]>();
+		List<Integer> getSort = new ArrayList<Integer>();
+		tempList = getPopularTHs(amount, st);
+		for (int i = 0; i < tempList.size(); i++) {
+			int hid = Integer.parseInt((tempList.get(i))[0]);
+			if (hid == suggestionList.get(i)) {
+				popularList.add(tempList.get(i));
+				getSort.add(Integer.parseInt((tempList.get(i)[3])));
+			}
+		}
+		Collections.sort(getSort, Collections.reverseOrder());
+		ArrayList<String[]> popularLists = new ArrayList<String[]>();
+		if (popularList.size() == getSort.size()) {
+			for (int i = 0; i < popularList.size(); i++) {
+				for (int j = 0; j < popularList.size(); j++) {
+					if (Integer.parseInt((popularList.get(j))[3]) == getSort.get(i)) {
+						popularLists.add(popularList.get(i));
+					}
+				}
+			}
+		}
+		return popularLists;
 	}
 
 	public ArrayList<String[]> getMostExpensiveTHs(String amount, Statement st) {
@@ -272,68 +313,6 @@ public class TH {
 		}
 		return forReturn;
 
-	}
-
-
-	public ArrayList<String> getHighestRate(int amount, Statement stmt){
-		ArrayList<String> result = new ArrayList<String>();
-		
-		String sql = "select * from TH t, "
-				+ "Feedback f where t.h_id = f.h_id group by category" + 
-				 "having (select AVG(f.score) as average order by (average) limit " + amount + ")" + ";";
-		ResultSet rs = null;
-		try {
-			rs = stmt.executeQuery(sql);
-			while (rs.next()) {
-				
-				//result.add(arr);
-			}
-			rs.close();
-		} catch (SQLException e) {
-
-		}
-	
-		return result;
-	}
-	public ArrayList<String[]> getSuggestion(String login, int h_id, String amount, Statement st) {
-		ArrayList<Integer> suggestionList = new ArrayList<Integer>();
-		ArrayList<String[]> tempList = new ArrayList<String[]>();
-		String sql = "select r.h_id from Reserve r, Visit v where r.login = '" + login + "' and r.r_id = v.r_id;";
-		ResultSet rs = null;
-		try {
-			rs = st.executeQuery(sql);
-			while (rs.next()) {
-				if (rs.getInt("h_id") != h_id) {
-					suggestionList.add(rs.getInt("h_id"));
-				}
-			}
-			rs.close();
-
-		} catch (SQLException e) {
-
-		}
-		ArrayList<String[]> popularList = new ArrayList<String[]>();
-		List<Integer> getSort = new ArrayList<Integer>();
-		tempList = getPopularTHs(amount, st);
-		for (int i = 0; i < tempList.size(); i++) {
-			int hid = Integer.parseInt((tempList.get(i))[0]);
-			if (hid == suggestionList.get(i)) {
-				popularList.add(tempList.get(i));
-				getSort.add(Integer.parseInt((tempList.get(i)[3])));
-			}
-		}
-		Collections.sort(getSort, Collections.reverseOrder());
-		ArrayList<String[]> popularLists = new ArrayList<String[]>();
-		if (popularList.size() == getSort.size()) {
-			for (int i = 0; i < popularList.size(); i++) {
-				for (int j = 0; j < popularList.size(); j++) {
-					if (Integer.parseInt((popularList.get(j))[3]) == getSort.get(i)) {
-						popularLists.add(popularList.get(i));
-					}
-				}
-			}
-		}
-		return popularLists;
 	}
 
 	public ArrayList<String> filter(String field, int min, int max, String value, String sort, String increase,

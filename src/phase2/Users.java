@@ -8,10 +8,11 @@ public class Users {
 		// Default constructor
 	}
 
-	public void newUser(String login, String name, String userType, String contact_Num, String Address, String password,
+	public void newUser(String login, String name, String contact_Num, String Address, String password,
 			Statement st) {
 		String sql = "insert into Users (login, name, userType, contact__Num, Address, password) " + "Values ('" + login
-				+ "', '" + name + "', '" + userType + "', '" + contact_Num + "', '" + Address + "', '" + password + "');";
+				+ "', '" + name + "', 'user', '" + contact_Num + "', '" + Address + "', '" + password
+				+ "');";
 		try {
 			st.executeUpdate(sql);
 		} catch (SQLException e) {
@@ -19,9 +20,39 @@ public class Users {
 		} catch (Exception e) {
 
 		}
-
 	}
 
+	public String isLoginMatch(String login, String password, Statement st) {
+		String sql = "select login, password, userType from Users where login = '" + login + "';";
+		ResultSet rs = null;
+		String type = "";
+		try {
+			rs = st.executeQuery(sql);
+			while (rs.next()) {
+				if (rs.getString("password").equals(password))
+					type = rs.getString("userType");
+				else
+					rs.close();
+					return "false"; // Password does not match
+			}
+
+		} catch (SQLException e) {
+
+		} finally {
+			try {
+				if (!rs.isClosed() || rs != null)
+					rs.close();
+			} catch (Exception e) {
+
+			}
+		}
+		if (type.equals(""))
+			return "false";
+		else
+			return type;
+	}
+
+	
 	public ArrayList<String[]> getTrustedUsers(Statement st, String amount) {
 		String[] trusted;
 		ArrayList<String[]> array = new ArrayList<String[]>();
@@ -165,13 +196,14 @@ public class Users {
 		ArrayList<String> A_oneDegreeList = getOneDegreeSeperation(userNameA, contact_NumA, st);
 		ArrayList<String> B_oneDegreeList = getOneDegreeSeperation(userNameB, contact_NumB, st);
 		ArrayList<String> forReturn = new ArrayList<String>();
-		if(A_oneDegreeList.isEmpty() || B_oneDegreeList.isEmpty()) return forReturn;
-	//	else if(A_oneDegreeList.contains(userNameB) || B_oneDegreeList.contains(userNameA)) return forReturn;
-		else if(!A_oneDegreeList.contains(userNameB) && !B_oneDegreeList.contains(userNameA))
-		{
-			for(String s : A_oneDegreeList)
-			{
-				if(B_oneDegreeList.contains(s)) forReturn.add(s);
+		if (A_oneDegreeList.isEmpty() || B_oneDegreeList.isEmpty())
+			return forReturn;
+		// else if(A_oneDegreeList.contains(userNameB) ||
+		// B_oneDegreeList.contains(userNameA)) return forReturn;
+		else if (!A_oneDegreeList.contains(userNameB) && !B_oneDegreeList.contains(userNameA)) {
+			for (String s : A_oneDegreeList) {
+				if (B_oneDegreeList.contains(s))
+					forReturn.add(s);
 			}
 		}
 		return forReturn;
