@@ -9,13 +9,14 @@ public class Users {
 	}
 
 	public void newUser(String login, String name, String contact_Num, String Address, String password,
-			Statement st) {
+			Statement st) throws SQLException {
 		String sql = "insert into Users (login, name, userType, contact__Num, Address, password) " + "Values ('" + login
 				+ "', '" + name + "', 'user', '" + contact_Num + "', '" + Address + "', '" + password
 				+ "');";
 		try {
 			st.executeUpdate(sql);
 		} catch (SQLException e) {
+			throw e;
 
 		} catch (Exception e) {
 
