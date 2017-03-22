@@ -3,7 +3,6 @@ package phase2;
 import java.util.*;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Locale.Category;
 
 public class TH {
 	public boolean newTH(String name, String address, String yearbuild, String telephone, String keyword, String price,
@@ -163,6 +162,26 @@ public class TH {
 		return forReturn;
 	}
 
+	public ArrayList<String> getHighestRate(int amount, Statement stmt) {
+		ArrayList<String> result = new ArrayList<String>();
+
+		String sql = "select * from TH t, " + "Feedback f where t.h_id = f.h_id group by t.category"
+				+ "having (select AVG(f.score) as average order by (average) limit " + amount + ")" + ";";
+		ResultSet rs = null;
+		try {
+			rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+
+				// result.add(arr);
+			}
+			rs.close();
+		} catch (SQLException e) {
+
+		}
+
+		return result;
+	}
+
 	public ArrayList<String[]> getSuggestion(String login, int h_id, String amount, Statement st) {
 		ArrayList<Integer> suggestionList = new ArrayList<Integer>();
 		ArrayList<String[]> tempList = new ArrayList<String[]>();
@@ -225,37 +244,27 @@ public class TH {
 				sql = "select t.name, t.category, AVG(r.cost) AS AverageCost from "
 						+ "TH t, Reserve r, Visit v where t.h_id = r.h_id and r.r_id = v.r_id and t.category = '" + s
 						+ "' group by t.name order by t.category, AverageCost desc;";
-				
+
 				rs = null;
-				try
-				{
+				try {
 					rs = st.executeQuery(sql);
-					while(rs.next())
-					{
+					while (rs.next()) {
 						arr = new String[3];
 						arr[0] = rs.getString("name");
 						arr[1] = rs.getString("category");
 						arr[2] = String.valueOf(rs.getFloat("AverageCost"));
 						forReturn.add(arr);
 					}
-				//	rs.close();
-				}
-				catch(SQLException e)
-				{
-					
-				}
-				finally
-				{
-					try
-					{
-						if(rs == null || rs.isClosed())
-						{
+					// rs.close();
+				} catch (SQLException e) {
+
+				} finally {
+					try {
+						if (rs == null || rs.isClosed()) {
 							rs.close();
 						}
-					}
-					catch(Exception e)
-					{
-						
+					} catch (Exception e) {
+
 					}
 				}
 			}
@@ -276,37 +285,27 @@ public class TH {
 				sql = "select t.name, t.category, AVG(r.cost) AS AverageCost from "
 						+ "TH t, Reserve r, Visit v where t.h_id = r.h_id and r.r_id = v.r_id and t.category = '" + s
 						+ "' group by t.name order by t.category, AverageCost desc LIMIT " + limit + ";";
-				
+
 				rs = null;
-				try
-				{
+				try {
 					rs = st.executeQuery(sql);
-					while(rs.next())
-					{
+					while (rs.next()) {
 						arr = new String[3];
 						arr[0] = rs.getString("name");
 						arr[1] = rs.getString("category");
 						arr[2] = String.valueOf(rs.getFloat("AverageCost"));
 						forReturn.add(arr);
 					}
-				//	rs.close();
-				}
-				catch(SQLException e)
-				{
-					
-				}
-				finally
-				{
-					try
-					{
-						if(rs == null || rs.isClosed())
-						{
+					// rs.close();
+				} catch (SQLException e) {
+
+				} finally {
+					try {
+						if (rs == null || rs.isClosed()) {
 							rs.close();
 						}
-					}
-					catch(Exception e)
-					{
-						
+					} catch (Exception e) {
+
 					}
 				}
 			}
