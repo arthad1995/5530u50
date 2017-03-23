@@ -338,7 +338,7 @@ public class TH {
 			try {
 				rs = stmt.executeQuery(sql);
 				while (rs.next()) {
-					result.add(rs.getString("h_id") + rs.getString("login") + "\t" + "\t" + rs.getString("category")
+					result.add(rs.getString("h_id") +"\t"+ rs.getString("login") + "\t"  + rs.getString("category")
 							+ "\t" + rs.getString("address") + "\t" + rs.getString("city") + "\t"
 							+ rs.getString("state") + "\t" + rs.getString("price") + "\t" + rs.getString("name") + "\t"
 							+ rs.getString("telephone") + "\t" + rs.getString("keyword") + "\t"
