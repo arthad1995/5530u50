@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Driver {
 
-	ArrayList<String> currentList;
-	String login;
+	private static ArrayList<String> currentList;
+	private static String login;
 	public static void main(String[] args) {
 		System.out.println("Welcome to Utel");
 		System.out.println("Please enter 1 to login");
@@ -117,7 +117,7 @@ public class Driver {
 		user.newUser(login, name, contact_Num, Address, password, c.stmt);
 
 	}
-	private void createNewTH(Connector c){
+	private static  void createNewTH(Connector c){
 		Scanner sc = new Scanner(System.in);
 		while(true){
 			System.out.println("Please input name of TH");
@@ -175,7 +175,7 @@ public class Driver {
 		}
 		sc.close();
 	}
-	private void updateTH(Connector c){
+	private static  void updateTH(Connector c){
 		Scanner sc = new Scanner(System.in);
 		while(true){
 			System.out.println("Please input your h_id here");
@@ -208,7 +208,7 @@ public class Driver {
 		sc.close();
 	}
 	
-private ArrayList<String> filter(Connector con){
+private static ArrayList<String> filter(Connector con){
 	ArrayList<String> result = new ArrayList<String>();
 	if(!currentList.isEmpty()){
 		result = new ArrayList<String>(currentList);
@@ -268,7 +268,7 @@ private ArrayList<String> filter(Connector con){
 	}
 	return result;
 }
-private ArrayList<String[]> getpmost(String most, Connector c){
+private static ArrayList<String[]> getpmost(String most, Connector c){
 	ArrayList<String[]> result = null;
 	Scanner sc = new Scanner(System.in);
 	TH th = new TH();
@@ -296,7 +296,7 @@ private ArrayList<String[]> getpmost(String most, Connector c){
 	return result;
 }
 
-	private void reserve(Connector c) {
+	private static void reserve(Connector c) {
 		Scanner sc = new Scanner(System.in);
 		 Date from  = new Date();
 		 Date to = new Date();
@@ -335,6 +335,11 @@ private ArrayList<String[]> getpmost(String most, Connector c){
 			    	System.out.println("Please input valid date format");
 			    	continue;
 			    }
+			 System.out.println("Are you confirm to reserve? y for yes, n for no") ;
+			 String confirm = sc.nextLine();
+			 if(confirm.equalsIgnoreCase("y")){
+				 continue;
+			 }
 			 Period p = new Period();
 				int p_id = p.getP_id(from, to, c.stmt);
 				Available a = new Available();
@@ -355,7 +360,7 @@ private ArrayList<String[]> getpmost(String most, Connector c){
 			 break;
 		}	
 	}
-	private void giveFeedback(Connector c){
+	private static void giveFeedback(Connector c){
 		Scanner sc = new Scanner(System.in);
 		while(true){
 			System.out.println("Please input h_id you want to give feedback, press q to quit");
@@ -395,7 +400,7 @@ private ArrayList<String[]> getpmost(String most, Connector c){
 			}
 		}	
 	}
-	private void rateFeedback(Connector c){
+	private static void rateFeedback(Connector c){
 		Scanner sc = new Scanner(System.in);
 		while(true){
 			System.out.println("Please input f_id you want to give feedback, press q to quit");
@@ -434,7 +439,7 @@ private ArrayList<String[]> getpmost(String most, Connector c){
 			}
 		}
 	}
-	private ArrayList<String> getTHfeedback(Connector c){
+	private static ArrayList<String> getTHfeedback(Connector c){
 		ArrayList<String> result = new ArrayList<String>();
 		Scanner sc = new Scanner(System.in);
 		while(true){
@@ -468,7 +473,7 @@ private ArrayList<String[]> getpmost(String most, Connector c){
 	}
 		return result;
 	}	
-	private ArrayList<String> getTHrate(Connector c){
+	private static ArrayList<String> getTHrate(Connector c){
 		ArrayList<String> result = new ArrayList<String>();
 		Scanner sc = new Scanner(System.in);
 		while(true){
@@ -502,7 +507,7 @@ private ArrayList<String[]> getpmost(String most, Connector c){
 	}
 		return result;
 	}	
-	private void setTrust(Connector c){
+	private static void setTrust(Connector c){
 		Scanner sc = new Scanner(System.in);
 		while(true){
 			System.out.println("Please input user that you want to trust/untrust, input q for quit");
@@ -531,6 +536,116 @@ private ArrayList<String[]> getpmost(String most, Connector c){
 			break;
 		}			
 	}
-	
+	private static void visit(Connector c){
+		Scanner sc = new Scanner(System.in);
+		while(true){
+			System.out.println("Please input date that you check in, press q to quit");
+			String fromstr = sc.nextLine();
+			 DateFormat df = new SimpleDateFormat("MM/dd/yyyy"); 
+			if(fromstr.equals("q")){
+				break;
+			}			
+			  fromstr = sc.nextLine();
+			  Date from = new Date();
+			 try{
+				 from = df.parse(fromstr);
+			     }
+			    catch(Exception e){
+			    	System.out.println("Please input valid date format");
+			    	continue;
+			    }
+			 System.out.println("Please input date you want to check out mm/dd/yyyy format") ;
+			 String tostr = sc.nextLine();
+			 Date to = new Date();
+			 try{
+				 to = df.parse(tostr);
+			     }
+			    catch(Exception e){
+			    	System.out.println("Please input valid date format");
+			    	continue;
+			    }
+			 System.out.println("Please r_id that you visited");
+			 String r_idstr = sc.nextLine();
+				int r_id = 0;
+				 try{
+					 r_id = Integer.parseInt(r_idstr);
+				     }
+				    catch(Exception e){
+				    	System.out.println("Please input valid number");
+				    	continue;
+				    }
+			 
+			 System.out.println("Are you confirm to add visit? y for yes, n for no") ;
+			 String confirm = sc.nextLine();
+			 if(confirm.equalsIgnoreCase("y")){
+				 continue;
+			 }
+			 Visit v = new Visit();
+			 boolean check =v.addVisit(from, to, r_id, c.stmt);
+				if(check){
+					System.out.println("You successfully add visit");
+					break;
+				}
+				else{
+					System.out.println("oooops, seems something going wrong, please check your input");
+					continue;
+				}
+		}	
+	}
+	private static void addPeriod(Connector c){
+		Scanner sc = new Scanner(System.in);
+		while(true){
+			System.out.println("Please input h_id you want to add period, press q to quit");
+			String h_idstr = sc.nextLine();
+			if(h_idstr.equals("q")){
+				break;
+			}
+			int h_id = 0;
+			 try{
+				 h_id = Integer.parseInt(h_idstr);
+			     }
+			    catch(Exception e){
+			    	System.out.println("Please input valid number");
+			    	continue;
+			    }
+			 System.out.println("Please input date that you check in");
+				String fromstr = sc.nextLine();
+				 DateFormat df = new SimpleDateFormat("MM/dd/yyyy"); 						
+				  fromstr = sc.nextLine();
+				  Date from = new Date();
+				 try{
+					 from = df.parse(fromstr);
+				     }
+				    catch(Exception e){
+				    	System.out.println("Please input valid date format");
+				    	continue;
+				    }
+				 System.out.println("Please input date you want to check out mm/dd/yyyy format") ;
+				 String tostr = sc.nextLine();
+				 Date to = new Date();
+				 try{
+					 to = df.parse(tostr);
+				     }
+				    catch(Exception e){
+				    	System.out.println("Please input valid date format");
+				    	continue;
+				    }
+				 Period p = new Period();
+				 p.addPeriod(from, to, c.stmt);
+				 int pid = p.getP_id(from, to, c.stmt);
+				 Available a = new Available();
+				 TH th = new TH();
+				 String price = th.filter("h_id", 0, 0, h_id+"", "p", "DESC", c.stmt).get(0).split("\t")[6];
+				 boolean check = a.addAvilable(h_id, pid, Double.parseDouble(price), c.stmt);
+				 if(check){
+						System.out.println("You successfully add Period");
+						break;
+					}
+					else{
+						System.out.println("oooops, seems something going wrong, please check your input");
+						continue;
+					}
+		}
+	}
 	
 }
