@@ -1,11 +1,11 @@
 package phase2;
 
 import java.util.*;
+import java.util.Date;
 import java.sql.*;
-import java.util.ArrayList;
 
 public class TH {
-	public boolean newTH(String name, String address, String yearbuild, String telephone, String keyword, String price,
+	public boolean newTH(String name, String address, Date yearbuild, String telephone, String keyword, double price,
 			String url, String category, Statement stmt) {
 		String sql = "insert into TH (name, address, url, telephone, yearBuild, price, category,keyword) " + "values ('"
 				+ name + "','" + address + "','" + url + "','" + telephone + "','" + yearbuild + "','" + price + "','"
@@ -162,9 +162,9 @@ public class TH {
 		return forReturn;
 	}
 
-	public ArrayList<String> getHighestRate(int amount, Statement stmt) {
-		ArrayList<String> result = new ArrayList<String>();
-
+	public ArrayList<String[]> getHighestRate(int amount, Statement stmt) {
+		ArrayList<String[]> result = new ArrayList<String[]>();
+		String[] arr ;
 		String sql = "select * from TH t, " + "Feedback f where t.h_id = f.h_id group by t.category"
 				+ "having (select AVG(f.score) as average order by (average) limit " + amount + ")" + ";";
 		ResultSet rs = null;
@@ -172,7 +172,11 @@ public class TH {
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 
-				// result.add(arr);
+				arr = new String[3];
+				arr[0] = rs.getString("name");
+				arr[1] = rs.getString("category");
+				arr[2] = String.valueOf(rs.getFloat("AverageCost"));
+				result.add(arr);
 			}
 			rs.close();
 		} catch (SQLException e) {
