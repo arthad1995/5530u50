@@ -10,8 +10,9 @@ import java.util.concurrent.TimeUnit;
 
 public class Driver {
 
-	private static ArrayList<String> currentList;
+	//private static ArrayList<String> currentList;
 	private static String login;
+	private static int broswingh_id = -1;
 	public static void main(String[] args) {
 		System.out.println("Welcome to Utel");
 		System.out.println("Please enter 1 to login");
@@ -210,9 +211,9 @@ public class Driver {
 	
 private static ArrayList<String> filter(Connector con){
 	ArrayList<String> result = new ArrayList<String>();
-	if(!currentList.isEmpty()){
-		result = new ArrayList<String>(currentList);
-	}
+//	if(!currentList.isEmpty()){
+//		result = new ArrayList<String>(currentList);
+//	}
 	ArrayList<String> recevier = new ArrayList<String>();
 	int min = 0;
 	int max = 0;
@@ -340,6 +341,7 @@ private static ArrayList<String[]> getpmost(String most, Connector c){
 			 if(confirm.equalsIgnoreCase("y")){
 				 continue;
 			 }
+			 
 			 Period p = new Period();
 				int p_id = p.getP_id(from, to, c.stmt);
 				Available a = new Available();
@@ -349,6 +351,7 @@ private static ArrayList<String[]> getpmost(String most, Connector c){
 			    int days = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 				Reserve r = new Reserve();
 				Date now = new Date();
+				broswingh_id = h_id;
 				boolean check = r.addReserve(login, h_id, (int)(days*price_per_night), from, to,now,c.stmt);
 				if(check){
 					System.out.println("Congratulations you have successfully reserve " + h_id);
@@ -473,7 +476,7 @@ private static ArrayList<String[]> getpmost(String most, Connector c){
 	}
 		return result;
 	}	
-	private static ArrayList<String> getTHrate(Connector c){
+	private static ArrayList<String> getuserful(Connector c){
 		ArrayList<String> result = new ArrayList<String>();
 		Scanner sc = new Scanner(System.in);
 		while(true){
@@ -651,6 +654,18 @@ private static ArrayList<String[]> getpmost(String most, Connector c){
 		ArrayList<String> result = new ArrayList<String>();
 						Visit v= new Visit();
 						result = v.getVisit(-1, login, c.stmt);							
+		return result;
+	}
+	private static ArrayList<String[]> getSugg(String amount,Connector c){
+		ArrayList<String[]> result = new ArrayList<String[]>();
+		TH th = new TH();
+		th.getSuggestion(login, broswingh_id, amount, c.stmt);
+		return result;
+	}
+	private static ArrayList<String[]> getTrust(String amount,Connector c){
+		ArrayList<String[]> result = new ArrayList<String[]>();
+		Users user = new Users();
+		user.getTrustedUsers( c.stmt,amount);
 		return result;
 	}
 	
