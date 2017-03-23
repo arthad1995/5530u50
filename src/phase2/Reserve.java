@@ -11,19 +11,22 @@ public class Reserve {
 		String sql = "select p.from, p.to from Period p, Avaiable a where"
 				+ " a.h_id = " + h_id + " a.p_id = p.p_id"+";";
 		ResultSet rs = null;
+		boolean check = false;
 		try {
 			rs = stmt.executeQuery(sql);	
 
 			while (rs.next()) {
-				if(from.before(rs.getDate("from"))||to.after(rs.getDate("to"))){
-					return false;
+				if(from.after(rs.getDate("from"))&&to.before(rs.getDate("to"))){
+					check = true;
 				}
 	 			
 	 		}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		
+		if(!check){
+			return false;
+		}
 		int success = 0;
 		 sql = "insert into Reserve (login, h_id,cost,from, to, reserve_date) "
 					+ "VALUES ('" + login + "', '" + h_id + "', '"
