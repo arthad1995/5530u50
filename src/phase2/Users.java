@@ -8,10 +8,10 @@ public class Users {
 		// Default constructor
 	}
 
-	public void newUser(String login, String name, String contact_Num, String Address, String password,
+	public void newUser(String login, String name, String userType, String contact_Num, String Address, String password,
 			Statement st) throws SQLException {
 		String sql = "insert into Users (login, name, userType, contact__Num, Address, password) " + "Values ('" + login
-				+ "', '" + name + "', 'user', '" + contact_Num + "', '" + Address + "', '" + password
+				+ "', '" + name + "', '" + userType + "', " + contact_Num + "', '" + Address + "', '" + password
 				+ "');";
 		try {
 			st.executeUpdate(sql);
@@ -165,8 +165,8 @@ public class Users {
 
 	}
 
-	public ArrayList<String> getOneDegreeSeperation(String nameA, String contact_Num, Statement st) {
-		String nameALogin = getUserLogin(nameA, contact_Num, st);
+	public ArrayList<String> getOneDegreeSeperation(String login, Statement st) {
+		String nameALogin = login;
 		ArrayList<String> forReturn = new ArrayList<String>();
 
 		// select u.login from Users u, Favorites f1 where exists(select
@@ -192,16 +192,15 @@ public class Users {
 		return forReturn;
 	}
 
-	public ArrayList<String> getTwoDegreeSeperation(String userNameA, String userNameB, String contact_NumA,
-			String contact_NumB, Statement st) {
-		ArrayList<String> A_oneDegreeList = getOneDegreeSeperation(userNameA, contact_NumA, st);
-		ArrayList<String> B_oneDegreeList = getOneDegreeSeperation(userNameB, contact_NumB, st);
+	public ArrayList<String> getTwoDegreeSeperation(String loginA, String loginB, Statement st) {
+		ArrayList<String> A_oneDegreeList = getOneDegreeSeperation(loginA, st);
+		ArrayList<String> B_oneDegreeList = getOneDegreeSeperation(loginB, st);
 		ArrayList<String> forReturn = new ArrayList<String>();
 		if (A_oneDegreeList.isEmpty() || B_oneDegreeList.isEmpty())
 			return forReturn;
 		// else if(A_oneDegreeList.contains(userNameB) ||
 		// B_oneDegreeList.contains(userNameA)) return forReturn;
-		else if (!A_oneDegreeList.contains(userNameB) && !B_oneDegreeList.contains(userNameA)) {
+		else if (!A_oneDegreeList.contains(loginB) && !B_oneDegreeList.contains(loginA)) {
 			for (String s : A_oneDegreeList) {
 				if (B_oneDegreeList.contains(s))
 					forReturn.add(s);

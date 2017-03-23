@@ -7,15 +7,19 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Favorites {
-	public ArrayList<String> getFavorite(String login, Statement stmt) {
-		String sql = "select TH.name from TH " + "where h_id IN " + "(select h_id from Favorites where login = '"
+	public ArrayList<String[]> getFavorite(String login, Statement stmt) {
+		String sql = "select TH.h_id, TH.name from TH " + "where h_id IN " + "(select h_id from Favorites where login = '"
 				+ login + "');";
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<String[]> result = new ArrayList<String[]>();
+		String[] arr;
 		ResultSet rs = null;
 		try {
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				result.add(rs.getString("name"));
+				arr = new String[2];
+				arr[0] = String.valueOf(rs.getInt("h_id"));
+				arr[1] = rs.getString("name");
+				result.add(arr);
 			}
 			rs.close();
 		} catch (Exception e) {

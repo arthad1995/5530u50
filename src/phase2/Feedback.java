@@ -35,7 +35,6 @@ public class Feedback {
 	
 private boolean checkGive(int h_id, String login, Statement stmt) {
 		
-
 		String sql = "select * from Feedback  where h_id= " +h_id+" and login= " + login +";";
 
 		int rs = 0;

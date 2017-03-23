@@ -165,30 +165,8 @@ public class TH {
 	public ArrayList<String[]> getHighestRate(String amount, Statement stmt) {
 		ArrayList<String[]> result = new ArrayList<String[]>();
 		String[] arr ;
-		if(amount.equalsIgnoreCase("all")){
-			String sql = "select * from TH t, " + "Feedback f where t.h_id = f.h_id group by t.category"
-					+ "having (select AVG(f.score) as average order by (average)" + ")" + ";";
-			ResultSet rs = null;
-			try {
-				rs = stmt.executeQuery(sql);
-				while (rs.next()) {
-
-					arr = new String[3];
-					arr[0] = rs.getString("name");
-					arr[1] = rs.getString("category");
-					arr[2] = String.valueOf(rs.getFloat("AverageCost"));
-					result.add(arr);
-				}
-				rs.close();
-			} catch (SQLException e) {
-
-			}
-
-			return result;
-		}				
-		int amt = Integer.parseInt(amount);
 		String sql = "select * from TH t, " + "Feedback f where t.h_id = f.h_id group by t.category"
-				+ "having (select AVG(f.score) as average order by (average) limit " + amt + ")" + ";";
+				+ "having (select AVG(f.score) as AverageRate order by (AverageRate) limit " + amount + ")" + ";";
 		ResultSet rs = null;
 		try {
 			rs = stmt.executeQuery(sql);
@@ -197,7 +175,7 @@ public class TH {
 				arr = new String[3];
 				arr[0] = rs.getString("name");
 				arr[1] = rs.getString("category");
-				arr[2] = String.valueOf(rs.getFloat("AverageCost"));
+				arr[2] = String.valueOf(rs.getFloat("AverageRate"));
 				result.add(arr);
 			}
 			rs.close();
@@ -360,7 +338,7 @@ public class TH {
 			try {
 				rs = stmt.executeQuery(sql);
 				while (rs.next()) {
-					result.add(rs.getString("h_id") +"\t"+ rs.getString("login") + "\t" + rs.getString("category")
+					result.add(rs.getString("h_id") + rs.getString("login") + "\t" + "\t" + rs.getString("category")
 							+ "\t" + rs.getString("address") + "\t" + rs.getString("city") + "\t"
 							+ rs.getString("state") + "\t" + rs.getString("price") + "\t" + rs.getString("name") + "\t"
 							+ rs.getString("telephone") + "\t" + rs.getString("keyword") + "\t"

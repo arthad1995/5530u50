@@ -1,16 +1,16 @@
 package phase2;
 
 import java.sql.*;
-import java.util.*;
 import java.util.Date;
+import java.util.*;
 
 public class Period {
 
 	public Period() {
 	}
 
-	public void addPeriod( Date from, Date to, Statement st) {
-		String sql = "insert into Period (from, to) Values (" + ", '" + from + "', '" + to + "');";
+	public void addPeriod(Date from, Date to, Statement st) {
+		String sql = "insert into Period (from, to) Values ('" + from + "', '" + to + "');";
 		try {
 			st.executeUpdate(sql);
 		} catch (SQLException e) {
@@ -18,6 +18,7 @@ public class Period {
 		} catch (Exception e) {
 
 		}
+
 	}
 
 	public ArrayList<Date[]> getPeriod(int p_id, Statement st) {
@@ -48,8 +49,8 @@ public class Period {
 		return periodList;
 
 	}
-
-	public int getP_id(Date from, Date to, Statement st) {
+	
+public int getP_id(Date from, Date to, Statement st) {
 		
 		int p_id = -1;
 	//	ArrayList<Integer> p_idList = new ArrayList<Integer>();
@@ -75,4 +76,5 @@ public class Period {
 		return p_id;
 
 	}
+
 }
