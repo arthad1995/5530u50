@@ -6,13 +6,30 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class Reserve {
-	public boolean addReserve( String login,int h_id,  int cost,Date from, Date to,
+	public boolean addReserve( String login,int h_id, int cost,Date from, Date to,
 			Date reserve_date,Statement stmt) {
-		String sql = "insert into Reserve (login, h_id,cost,from, to, reserve_date) "
-	+ "VALUES ('" + login + "', '" + h_id + "', '"
+		String sql = "select p.from, p.to from Period p, Avaiable a where"
+				+ " a.h_id = " + h_id + " a.p_id = p.p_id"+";";
+		ResultSet rs = null;
+		try {
+			rs = stmt.executeQuery(sql);	
+
+			while (rs.next()) {
+				if(from.before(rs.getDate("from"))||to.after(rs.getDate("to"))){
+					return false;
+				}
+	 			
+	 		}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		int success = 0;
+		 sql = "insert into Reserve (login, h_id,cost,from, to, reserve_date) "
+					+ "VALUES ('" + login + "', '" + h_id + "', '"
 				+ cost   + "', '" + from + "', '"+to + "', '" + reserve_date+"');";
 
-		int success = 0;
+		
 		try {
 			success = stmt.executeUpdate(sql);
 
