@@ -10,13 +10,17 @@ public class Reserve {
 	public boolean addReserve( String login,int h_id, int cost,Date from, Date to,
 			Date reserve_date,Statement stmt) {
 		String sql = "select p.from, p.to from Period p, Avaiable a where"
-				+ " a.h_id = " + h_id + " a.p_id = p.p_id"+";";
+				+  " a.h_id = " + h_id + " and a.p_id = p.p_id"+";";
+		Date from1 = new Date();
+		Date to1 = new Date();
 		ResultSet rs = null;
 		boolean check = false;
 		try {
 			rs = stmt.executeQuery(sql);	
 
 			while (rs.next()) {
+				from1 = rs.getDate("from");
+				to1 = rs.getDate("to");
 				if(from.after(rs.getDate("from"))&&to.before(rs.getDate("to"))){
 					check = true;
 				}
@@ -28,6 +32,29 @@ public class Reserve {
 		if(!check){
 			return false;
 		}
+		
+		 sql = "select * from Reserve r where"
+				+  " r.login = " + login + " and r.from = " + from +" r.to = " +  to+";";
+		
+		 rs = null;
+			int count = 0;
+		try {
+			rs = stmt.executeQuery(sql);	
+		
+			while (rs.next()) {
+				count++;
+	 			
+	 		}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		if(count>0){
+			return false;
+		}
+		
+		
+		
+		
 		int success = 0;
 		 sql = "insert into Reserve (login, h_id,cost,from, to, reserve_date) "
 					+ "VALUES ('" + login + "', '" + h_id + "', '"

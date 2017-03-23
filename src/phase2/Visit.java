@@ -16,6 +16,7 @@ public class Visit {
 				return false;
 			}
 		}
+		
 		String sql = "insert into Visit (from, to, r_id) " + "VALUES ('" + from + "', '" + to + "', '"
 				+ r_id  + "');";
 

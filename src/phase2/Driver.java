@@ -647,5 +647,11 @@ private static ArrayList<String[]> getpmost(String most, Connector c){
 					}
 		}
 	}
+	private static ArrayList<String> getVisit(Connector c){
+		ArrayList<String> result = new ArrayList<String>();
+						Visit v= new Visit();
+						result = v.getVisit(-1, login, c.stmt);							
+		return result;
+	}
 	
 }
