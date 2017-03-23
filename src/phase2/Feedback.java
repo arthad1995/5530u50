@@ -1,11 +1,14 @@
 package phase2;
 
-import java.sql.*;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Feedback {
 
-	public boolean giveFeedback(String h_id, String login, String text, String score, String date, Statement stmt) {
+	public boolean giveFeedback(int h_id, String login, String text, int score, Date date, Statement stmt) {
 		
 		//new connection??????
 		if(!checkGive(h_id,login,stmt)){
@@ -30,7 +33,7 @@ public class Feedback {
 		return false;
 	}
 	
-private boolean checkGive(String h_id, String login, Statement stmt) {
+private boolean checkGive(int h_id, String login, Statement stmt) {
 		
 
 		String sql = "select * from Feedback  where h_id= " +h_id+" and login= " + login +";";
@@ -51,7 +54,7 @@ private boolean checkGive(String h_id, String login, Statement stmt) {
 		return false;
 	}
 	
-	public ArrayList<String> getTHFeedback(String h_id, String amount, Statement stmt) {
+	public ArrayList<String> getTHFeedback(int h_id, String amount, Statement stmt) {
 		ArrayList<String> result = new ArrayList<String> ();
 		
 		
@@ -104,7 +107,7 @@ private boolean checkGive(String h_id, String login, Statement stmt) {
 			return result;
 		}
 	}
-	public boolean rateFeedback(String login, int f_id, String rating, Statement stmt) {
+	public boolean rateFeedback(String login, int f_id, int rating, Statement stmt) {
 		
 		if(!checkRate(f_id, login, stmt)){
 			return false;
@@ -127,7 +130,8 @@ private boolean checkGive(String h_id, String login, Statement stmt) {
 	 	}
 		return false;
 	}
-	public ArrayList<String> getrate(String h_id, String amount, Statement stmt) {
+	
+	public ArrayList<String> getrate(int h_id, String amount, Statement stmt) {
 		ArrayList<String> result = new ArrayList<String> ();
 		
 		

@@ -1,9 +1,10 @@
 package phase2;
 
-import java.sql.Date;
+
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Reserve {
 	public boolean addReserve( String login,int h_id, int cost,Date from, Date to,

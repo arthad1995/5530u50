@@ -1,7 +1,10 @@
 package phase2;
 
-import java.sql.*;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Visit {
 	public boolean addVisit( Date from, Date to, int r_id,Statement stmt) {
