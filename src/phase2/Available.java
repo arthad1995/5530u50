@@ -28,7 +28,7 @@ public class Available {
 		ArrayList<String> result = new ArrayList<String>();
 		 
 			String sql = "select * from Avilable " +
-					  "where h_id ='" +h_id + " and " + "p_id = " +p_id+ "'";
+					  "where h_id =" +h_id + " and " + "p_id = " +p_id+ "'";
 			ResultSet rs = null;
 			try{
 			rs = stmt.executeQuery(sql);		

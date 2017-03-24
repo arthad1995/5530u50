@@ -68,7 +68,7 @@ public class Driver {
 			}
 			
 		}
-		sc.close();
+	
 	}
 
 	public static void showAdminPage(Connector c) {
@@ -319,7 +319,7 @@ public class Driver {
 
 		Users user = new Users();
 		user.newUser(login, name, userType, contact_Num, Address, password, c.stmt);
-		//sc.close();
+		// 
 	}
 
 	private static void createNewTH(Connector c) {
@@ -410,7 +410,7 @@ public class Driver {
 				}
 			}
 		}
-		sc.close();
+	//	 
 	}
 
 	private static void filter(Connector con) {
@@ -470,7 +470,7 @@ public class Driver {
 		}
 		for(String s :result)
 		System.out.println(s);
-		sc.close();
+	//	 
 	}
 
 	public static void showDegreeSeparation(Connector con) {
@@ -625,7 +625,7 @@ public class Driver {
 		default:
 			break;
 		}
-		sc.close();
+		 
 	}
 
 	public static void manageFavorite(Connector con) {
@@ -729,7 +729,7 @@ public class Driver {
 			}
 
 		}
-		sc.close();
+		 
 	}
 
 	// public static ArrayList<String[]> getpmost(String most, Connector c) {
@@ -817,7 +817,7 @@ public class Driver {
 			}
 			break;
 		}
-		sc.close();
+		 
 	}
 
 	private static void giveFeedback(Connector c) {
@@ -856,7 +856,7 @@ public class Driver {
 				continue;
 			}
 		}
-		sc.close();
+		 
 	}
 
 	private static void rateFeedback(Connector c) {
@@ -894,7 +894,7 @@ public class Driver {
 				continue;
 			}
 		}
-		sc.close();
+		 
 	}
 
 	private static ArrayList<String> getTHfeedback(Connector c) {
@@ -927,7 +927,7 @@ public class Driver {
 				break;
 			}
 		}
-		sc.close();
+		 
 		return result;
 	}
 
@@ -961,7 +961,7 @@ public class Driver {
 				break;
 			}
 		}
-		sc.close();
+		 
 		return result;
 	}
 
@@ -992,7 +992,7 @@ public class Driver {
 			u.trustRecording(login, login2, f, c.stmt);
 			break;
 		}
-		sc.close();
+		 
 	}
 
 	private static void visit(Connector c) {
@@ -1046,7 +1046,7 @@ public class Driver {
 				continue;
 			}
 		}
-		sc.close();
+		 
 	}
 
 	private static void addPeriod(Connector c) {
@@ -1099,7 +1099,7 @@ public class Driver {
 				continue;
 			}
 		}
-		sc.close();
+		 
 	}
 
 	private static void getVisit(Connector c) {
@@ -1136,7 +1136,7 @@ public class Driver {
 				break;
 			}
 		
-		sc.close();
+		 
 		for(String[] s: result){
 			System.out.println("name: " + s[0]+ " login " + s[1] + " total trust " + s[2]);
 		}	
@@ -1165,7 +1165,7 @@ public class Driver {
 				break;
 			}
 		
-		sc.close();
+		
 		for(String s: result){
 			System.out.println(s);
 		}	

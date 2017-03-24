@@ -27,7 +27,7 @@ public class TH {
 	}
 
 	public boolean updateTH(int h_id, String updateField, String updateValue, Statement stmt) {
-		String sql = "UPDATE TH " + "set " + updateField + "='" + updateValue + "'" + " where h_id='" + h_id + "';";
+		String sql = "UPDATE TH " + "set '" + updateField + "'='" + updateValue + "'" + " where h_id='" + h_id + "';";
 
 		int rs = 0;
 		try {
@@ -352,15 +352,15 @@ public class TH {
 			return result;
 		} else {
 			ResultSet rs = null;
-			String sql = "select * from TH" + " where " + field + " = " + value;
+			String sql = "select * from TH" + " where '" + field + "' = '" + value+"'";
 			if (sort.equals("p")) {
-				sql = sql + " order by " + "Price" + increase + ";";
+				sql = sql + " order by " + "Price " + increase + ";";
 			} else if (sort.equals("s")) {
 				sql = sql + " group by (h_id) having (select h_id, AVG(score) AS average)"
 						+ "from Feedback group by h_id)" + "order by average " + increase + ";";
 			} else if (sort.equals("st")) {
 				sql = "select * from TH th ,Trust t, Users u,Feedback f where t.login2 = u.login and "
-						+ "f.login = t.login2" + field + " = " + value + " group by (f.h_id) having "
+						+ "f.login = t.login2 '" + field + "' = '" + value + "' group by (f.h_id) having "
 						+ " (select h_id, AVG(score) AS average" + "where sum(t.isTrusted) > 0" + "order by average "
 						+ increase + ";";
 			}

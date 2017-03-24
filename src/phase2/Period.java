@@ -26,7 +26,7 @@ public class Period {
 
 		ArrayList<Date[]> periodList = new ArrayList<Date[]>();
 
-		String sql = "SELECT Period.from, Period.to from Period where p_id = " + p_id;
+		String sql = "select Period.from, Period.to from Period where p_id = " + p_id;
 
 		int count = 0;
 		ResultSet rs = null;
@@ -55,7 +55,7 @@ public int getP_id(Date from, Date to, Statement st) {
 		int p_id = -1;
 	//	ArrayList<Integer> p_idList = new ArrayList<Integer>();
 
-		String sql = "SELECT Period.from, Period.to from Period where from = " + from + " to = " + to;
+		String sql = "select Period.from, Period.to from Period where from = '" + from + "' to = '" + to+"';";
 
 		int count = 0;
 		ResultSet rs = null;

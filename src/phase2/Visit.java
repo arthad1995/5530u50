@@ -46,7 +46,7 @@ public class Visit {
 		ArrayList<String> result = new ArrayList<String>();
 		if(vid!=-1){ 
 			String sql = "select * from Visit " +
-					  "where vid ='" +vid +"'";
+					  "where vid =" +vid +";";
 			ResultSet rs = null;
 			try{
 			rs = stmt.executeQuery(sql);		

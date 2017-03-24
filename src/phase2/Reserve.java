@@ -10,7 +10,7 @@ public class Reserve {
 	public boolean addReserve( String login,int h_id, int cost,Date from, Date to,
 			Date reserve_date,Statement stmt) {
 		String sql = "select p.from, p.to from Period p, Avaiable a where"
-				+  " a.h_id = " + h_id + " and a.p_id = p.p_id"+";";
+				+  " a.h_id = '" + h_id + "' and a.p_id = p.p_id"+";";
 		Date from1 = new Date();
 		Date to1 = new Date();
 		ResultSet rs = null;
@@ -34,7 +34,7 @@ public class Reserve {
 		}
 		
 		 sql = "select * from Reserve r where"
-				+  " r.login = " + login + " and r.from = " + from +" r.to = " +  to+";";
+				+  " r.login = '" + login + "' and r.from = '" + from +"' r.to = '" +  to+"';";
 		
 		 rs = null;
 			int count = 0;
@@ -81,7 +81,7 @@ public class Reserve {
 		Date[] arr = new Date[2];
 		if(r_id!=-1){ 
 			String sql = "select * from Reserve " +
-					  "where r_id ='" +r_id +"'";
+					  "where r_id =" +r_id +"";
 			ResultSet rs = null;
 			try{
 			rs = stmt.executeQuery(sql);		
@@ -97,7 +97,7 @@ public class Reserve {
 		}
 		else{
 			String sql = "select * from Reserve r" +
-					  "where" +"r.login  =" + login;
+					  "where" +"r.login  ='" + login+"';";
 			ResultSet rs = null;
 			try{
 			rs = stmt.executeQuery(sql);		
@@ -118,7 +118,7 @@ public class Reserve {
 		ArrayList<String> result = new ArrayList<String>();
 		if(r_id!=-1){ 
 			String sql = "select * from Reserve " +
-					  "where r_id ='" +r_id +"'";
+					  "where r_id =" +r_id +";";
 			ResultSet rs = null;
 			try{
 			rs = stmt.executeQuery(sql);		
