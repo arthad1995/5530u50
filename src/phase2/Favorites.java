@@ -8,8 +8,8 @@ import java.util.Date;
 
 public class Favorites {
 	public ArrayList<String[]> getFavorite(String login, Statement stmt) {
-		String sql = "select TH.h_id, TH.name from TH " + "where h_id IN " + "(select h_id from Favorites where login = '"
-				+ login + "');";
+		String sql = "select TH.h_id, TH.name from TH " + "where h_id IN "
+				+ "(select h_id from Favorites where login = '" + login + "');";
 		ArrayList<String[]> result = new ArrayList<String[]>();
 		String[] arr;
 		ResultSet rs = null;
@@ -58,7 +58,7 @@ public class Favorites {
 		String currentDate = dateFormat.format(date);
 
 		String sql = "UPDATE Favorites " + "SET h_id = (select h_id from TH where name ='" + changeValue
-				+ "'), fvdate ='" + currentDate + "'" + " WHERE login='" + login + "';";
+				+ "'), fvdate = '" + currentDate + "'" + " WHERE login='" + login + "';";
 
 		int count = 0;
 		try {
@@ -79,7 +79,7 @@ public class Favorites {
 
 		String sql = "delete * from Favorites "
 
-				+ " where login='" + login + "and" + " h_id='" + h_id + "';";
+				+ " where login='" + login + "' and" + " h_id = '" + h_id + "';";
 
 		int count = 0;
 		try {
