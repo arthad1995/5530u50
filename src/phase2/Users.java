@@ -10,16 +10,17 @@ public class Users {
 
 	public void newUser(String login, String name, String userType, String contact_Num, String Address, String password,
 			Statement st) throws SQLException {
-		String sql = "insert into Users (login, name, userType, contact__Num, Address, password) " + "Values ('" + login
-				+ "', '" + name + "', '" + userType + "', " + contact_Num + "', '" + Address + "', '" + password
+		String sql = "insert into Users (login, name, userType, contact_Num, Address, password) " + "Values ('" + login
+				+ "', '" + name + "', '" + userType + "', '" + contact_Num + "', '" + Address + "', '" + password
 				+ "');";
 		try {
 			st.executeUpdate(sql);
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 			throw e;
 
 		} catch (Exception e) {
-
+				System.out.println(e.getMessage());
 		}
 	}
 
@@ -30,11 +31,13 @@ public class Users {
 		try {
 			rs = st.executeQuery(sql);
 			while (rs.next()) {
+				//System.out.println("pwd is "+rs.getString("password") + "\n\n\n\n\n\n");
 				if (rs.getString("password").equals(password))
 					type = rs.getString("userType");
-				else
+				else{
 					rs.close();
 					return "false"; // Password does not match
+				}
 			}
 
 		} catch (SQLException e) {

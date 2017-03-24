@@ -57,7 +57,7 @@ public class Driver {
 			else if(option ==2){
 				try {
 					newUserRegistration(c);
-				} catch (SQLException e) {
+				} catch (Exception e) {
 					System.err.println("User login already exist");
 					continue;
 				}
@@ -92,7 +92,7 @@ public class Driver {
 					System.err.println("Not a valid selection");
 					continue;
 				}
-				if (selection.length() == 0 || s > 5 || s < 1) {
+				if (selection.length() == 0 || s > 6 || s < 1) {
 					System.out.println("Please enter a valid selection");
 					continue;
 				} else
@@ -109,14 +109,17 @@ public class Driver {
 				showDegreeSeparation(c);
 				break;
 			case 4:
-				//fill award
+				System.out.println("\nTop useful users\n");
+				topuseful(c);
+				System.out.println("\nTop trusted users\n");
+				toptrusted(c);
 				break;
 			case 5:
 				addPeriod(c);
 				break;
 			case 6:
 			default:
-				break;
+				return;
 			}
 
 		}
@@ -149,7 +152,7 @@ public class Driver {
 					System.err.println("Not a valid selection");
 					continue;
 				}
-				if (selection.length() == 0 || s > 5 || s < 1) {
+				if (selection.length() == 0 || s > 10 || s < 1) {
 					System.out.println("Please enter a valid selection");
 					continue;
 				} else
@@ -199,7 +202,7 @@ public class Driver {
 			case 8:
 				getVisit(c);
 				break;
-			case 9 :
+			case 9:
 				toptrusted(c);
 				break;
 			case 10:
@@ -240,7 +243,7 @@ public class Driver {
 		String[] arr = new String[2];
 		arr[0] = userName;
 		arr[1] = type;
-		
+		login = arr[0];
 		return arr;
 	}
 
@@ -316,7 +319,7 @@ public class Driver {
 
 		Users user = new Users();
 		user.newUser(login, name, userType, contact_Num, Address, password, c.stmt);
-		sc.close();
+		//sc.close();
 	}
 
 	private static void createNewTH(Connector c) {
@@ -326,16 +329,19 @@ public class Driver {
 			String name = sc.nextLine();
 			System.out.println("Please input TH address");
 			String address = sc.nextLine();
-			System.out.println("Please input year of TH");
+			System.out.println("Please city of TH");
+			String city = sc.nextLine();
+			System.out.println("Please state of TH");
+			String state = sc.nextLine();
+			System.out.println("Please input year of TH (in yyyy format)");
 
-			String startDateString = sc.nextLine();
-			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-			Date startDate = null;
+			String yearstr = sc.nextLine();
+			int year = 0;
 			try {
-				startDate = df.parse(startDateString);
-				String newDateString = df.format(startDate);
-				System.out.println(newDateString);
-			} catch (ParseException e) {
+				year = Integer.parseInt(yearstr);
+				//String newDateString = df.format(startDate);
+				//System.out.println(newDateString);
+			} catch (Exception e) {
 				System.out.println("invalid date format");
 				e.printStackTrace();
 				continue;
@@ -354,13 +360,14 @@ public class Driver {
 				System.out.println("Please input valid number");
 				continue;
 			}
-
-			System.out.println("Please url year of TH");
+			
+			System.out.println("Please url of TH");
 			String url = sc.nextLine();
-			System.out.println("Please category year of TH");
+			System.out.println("Please category of TH");
 			String category = sc.nextLine();
 			TH th = new TH();
-			boolean check = th.newTH(name, address, startDate, telephone, keyword, price, url, category, c.stmt);
+			//boolean check = th.newTH(name, address, startDate, telephone, keyword, price, url, category, c.stmt);
+			boolean check =th.newTH(login, name, city, state, address, year, telephone, keyword, price, url, category, c.stmt);
 			if (check) {
 				System.out.println("New TH created");
 				break;
@@ -373,7 +380,6 @@ public class Driver {
 			}
 
 		}
-		sc.close();
 	}
 
 	private static void updateTH(Connector c) {
@@ -1123,6 +1129,7 @@ public class Driver {
 				if (amount.equalsIgnoreCase("ALL")) {
 					Users u = new Users();
 					result = u.getTrustedUsers(c.stmt, amount);
+					break;
 				}
 				Users u = new Users();
 				result = u.getTrustedUsers(c.stmt, amount);
@@ -1132,7 +1139,35 @@ public class Driver {
 		sc.close();
 		for(String[] s: result){
 			System.out.println("name: " + s[0]+ " login " + s[1] + " total trust " + s[2]);
-		}
-		
+		}	
 	}
+	private static void topuseful(Connector c) {
+		ArrayList<String> result = new ArrayList<String>();
+		Scanner sc = new Scanner(System.in);
+		while (true) {
+	System.out.println("Please input amount you want to limit, ALL for all feedbacks, press q to quit");
+			String amount = sc.nextLine();
+			if (!amount.equalsIgnoreCase("ALL")) {
+				try {
+					Integer.parseInt(amount);
+				} catch (Exception e) {
+					System.out.println("Please input valid number");
+					continue;
+				}
+			}
+				if (amount.equalsIgnoreCase("ALL")) {
+					Feedback f= new Feedback();
+					result = f.gettopUserful(amount,c.stmt);
+					break;
+				}
+				Feedback f= new Feedback();
+				result = f.gettopUserful(amount, c.stmt);
+				break;
+			}
+		
+		sc.close();
+		for(String s: result){
+			System.out.println(s);
+		}	
+	}	
 }

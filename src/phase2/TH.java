@@ -5,11 +5,11 @@ import java.util.Date;
 import java.sql.*;
 
 public class TH {
-	public boolean newTH(String name, String address, Date yearbuild, String telephone, String keyword, double price,
+	public boolean newTH(String login,String name, String city, String state,String address, int yearbuild, String telephone, String keyword, double price,
 			String url, String category, Statement stmt) {
-		String sql = "insert into TH (name, address, url, telephone, yearBuild, price, category,keyword) " + "values ('"
+		String sql = "insert into TH (name, address, url, telephone, yearBuilt, price, category,keyword,city,state,login) " + "values ('"
 				+ name + "','" + address + "','" + url + "','" + telephone + "','" + yearbuild + "','" + price + "','"
-				+ category + "','" + keyword + "');";
+				+ category + "','" + keyword + "','" + city + "','" + state+"','" + login+"');";
 		int result = 0;
 		try {
 			result = stmt.executeUpdate(sql);
