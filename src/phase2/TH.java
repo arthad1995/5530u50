@@ -352,7 +352,7 @@ public class TH {
 			return result;
 		} else {
 			ResultSet rs = null;
-			String sql = "select * from TH" + " where '" + field + "' = '" + value+"'";
+			String sql = "select * from TH" + " where " + field + " = '" + value+"'";
 			if (sort.equals("p")) {
 				sql = sql + " order by " + "Price " + increase + ";";
 			} else if (sort.equals("s")) {
@@ -366,8 +366,10 @@ public class TH {
 			}
 			try {
 				rs = stmt.executeQuery(sql);
+				System.out.println(sql);
 				while (rs.next()) {
-					result.add(rs.getString("h_id") + rs.getString("login") + "\t" + "\t" + rs.getString("category")
+					
+					result.add(rs.getString("h_id") +"\t"+ rs.getString("login")  + "\t" + rs.getString("category")
 							+ "\t" + rs.getString("address") + "\t" + rs.getString("city") + "\t"
 							+ rs.getString("state") + "\t" + rs.getString("price") + "\t" + rs.getString("name") + "\t"
 							+ rs.getString("telephone") + "\t" + rs.getString("keyword") + "\t"

@@ -460,7 +460,9 @@ public class Driver {
 				result = new ArrayList<String>(recevier);
 				break;
 			}
-
+			for(String s :recevier)
+				System.out.println(s);
+			
 			for (String s : result) {
 				if (!recevier.contains(s)) {
 					result.remove(s);
@@ -468,8 +470,11 @@ public class Driver {
 			}
 
 		}
-		for(String s :result)
-		System.out.println(s);
+		for(String s :result){
+			System.out.println(s);
+			System.out.println("herererere");
+		}
+	
 	//	 
 	}
 
@@ -835,9 +840,9 @@ public class Driver {
 				System.out.println("Please input valid number");
 				continue;
 			}
-			System.out.println("Please input your text feedback, press q to quit");
+			System.out.println("Please input your text feedback");
 			String text = sc.nextLine();
-			System.out.println("Please input your score, press q to quit");
+			System.out.println("Please input your score");
 			String scorestr = sc.nextLine();
 			int score = -1;
 			try {
@@ -847,7 +852,8 @@ public class Driver {
 				continue;
 			}
 			Feedback f = new Feedback();
-			boolean check = f.giveFeedback(h_id, h_idstr, text, score, new Date(), c.stmt);
+			java.sql.Date sqlStartDate = new java.sql.Date(new Date().getTime());  
+			boolean check = f.giveFeedback(h_id, h_idstr, text, score, sqlStartDate, c.stmt);
 			if (check) {
 				System.out.println("You successfully gave feedback");
 				break;
