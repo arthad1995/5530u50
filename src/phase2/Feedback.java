@@ -202,4 +202,54 @@ private boolean checkGive(int h_id, String login, Statement stmt) {
 		}
 		return false;
 	}
+	
+	public ArrayList<String> gettopUserful( String amount, Statement stmt) {
+		ArrayList<String> result = new ArrayList<String> ();
+		
+		
+		// Rating query
+		if(amount.equalsIgnoreCase("all")) {
+			String sql="select distinct r.login, AVG(r.rating) as averageRating from Rates r"
+					+    " group by (r.login)"
+					+    " order by averageRating" + "';";
+			
+			ResultSet rs = null;
+		 	try {
+		 		rs = stmt.executeQuery(sql);
+		 		while (rs.next()) {
+		 			String temp="";
+		 			temp = rs.getString("text") + "\t" + rs.getString("score");
+		 			result.add(temp);
+		 		}
+		 		return result;
+		 	}
+		 	catch(Exception e) {
+		 		
+		 		System.err.println(e.getMessage());
+		 	}		
+			return result;
+		}
+		else{
+			String sql="select distinct r.login, AVG(r.rating) as averageRating from Rates r"
+					+    " group by (r.login)"
+					+    " order by averageRating limit " + Integer.parseInt(amount)+";";
+			
+			ResultSet rs = null;
+		 	try {
+		 		rs = stmt.executeQuery(sql);
+		 		while (rs.next()) {
+		 			String temp="";
+		 			temp = rs.getString("text") + "\t" + rs.getString("score");
+		 			result.add(temp);
+		 		}
+		 		return result;
+		 	}
+		 	catch(Exception e) {
+		 		
+		 		System.err.println(e.getMessage());
+		 	}		
+			return result;
+		}
+		
+	}
 }

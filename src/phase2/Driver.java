@@ -25,12 +25,12 @@ public class Driver {
 	}
 
 	public static void mainpage(Connector c) {
+		Scanner sc = new Scanner(System.in);
 		while (true) {
 			System.out.println("Welcome to Uotel");
 			System.out.println("Please enter 1 to login");
 			System.out.println("Please enter 2 for new user registration");
 			System.out.println("If you want to exit, please enter 3");
-			Scanner sc = new Scanner(System.in);
 			String optionstr = sc.nextLine();
 			int option = 0;
 			try {
@@ -68,6 +68,7 @@ public class Driver {
 			}
 			
 		}
+		sc.close();
 	}
 
 	public static void showAdminPage(Connector c) {
@@ -80,7 +81,8 @@ public class Driver {
 			System.out.println("Please enter number 2 to modify your TH");
 			System.out.println("Please enter number 3 to show the degrees of separation");
 			System.out.println("Please enter number 4 for awards");
-			System.out.println("If you want to exist, enter number 5");
+			System.out.println("Please enter number 5 for add available time");
+			System.out.println("If you want to exist, enter number 6");
 			System.out.println("Please make selection: ");
 			while (true) {
 				selection = sc.nextLine();
@@ -110,11 +112,15 @@ public class Driver {
 				//fill award
 				break;
 			case 5:
+				addPeriod(c);
+				break;
+			case 6:
 			default:
 				break;
 			}
 
 		}
+		
 	}
 
 	public static void showUserPage(Connector c) {
@@ -130,7 +136,10 @@ public class Driver {
 			System.out.println("Please enter number 5 trust or not trust other users");
 			System.out.println("Please enter number 6 set useful or useless to other feedbacks");
 			System.out.println("Please enter number 7 to request general information");
-			System.out.println("If you want to exist, enter number 8");
+			System.out.println("Please enter number 8 to view visit history");
+			System.out.println("Please enter number 9 to check trusted feedbacks");
+			System.out.println("If you want to exist, enter number 10");
+			
 			System.out.println("Please make selection: ");
 			while (true) {
 				selection = sc.nextLine();
@@ -188,11 +197,18 @@ public class Driver {
 				getGeneralInfo(c);
 				break;
 			case 8:
+				getVisit(c);
+				break;
+			case 9 :
+				toptrusted(c);
+				break;
+			case 10:
 				
 			default:
 				return;
 			}
 		}
+		
 	}
 
 	public static String[] userLogin(Connector c) {
@@ -300,6 +316,7 @@ public class Driver {
 
 		Users user = new Users();
 		user.newUser(login, name, userType, contact_Num, Address, password, c.stmt);
+		sc.close();
 	}
 
 	private static void createNewTH(Connector c) {
@@ -447,6 +464,7 @@ public class Driver {
 		}
 		for(String s :result)
 		System.out.println(s);
+		sc.close();
 	}
 
 	public static void showDegreeSeparation(Connector con) {
@@ -511,6 +529,7 @@ public class Driver {
 				System.out.println(s);
 			System.out.println("\n");
 		}
+		
 	}
 
 	public static void getGeneralInfo(Connector con) {
@@ -600,6 +619,7 @@ public class Driver {
 		default:
 			break;
 		}
+		sc.close();
 	}
 
 	public static void manageFavorite(Connector con) {
@@ -703,7 +723,7 @@ public class Driver {
 			}
 
 		}
-
+		sc.close();
 	}
 
 	// public static ArrayList<String[]> getpmost(String most, Connector c) {
@@ -791,6 +811,7 @@ public class Driver {
 			}
 			break;
 		}
+		sc.close();
 	}
 
 	private static void giveFeedback(Connector c) {
@@ -829,6 +850,7 @@ public class Driver {
 				continue;
 			}
 		}
+		sc.close();
 	}
 
 	private static void rateFeedback(Connector c) {
@@ -866,6 +888,7 @@ public class Driver {
 				continue;
 			}
 		}
+		sc.close();
 	}
 
 	private static ArrayList<String> getTHfeedback(Connector c) {
@@ -898,6 +921,7 @@ public class Driver {
 				break;
 			}
 		}
+		sc.close();
 		return result;
 	}
 
@@ -931,6 +955,7 @@ public class Driver {
 				break;
 			}
 		}
+		sc.close();
 		return result;
 	}
 
@@ -961,6 +986,7 @@ public class Driver {
 			u.trustRecording(login, login2, f, c.stmt);
 			break;
 		}
+		sc.close();
 	}
 
 	private static void visit(Connector c) {
@@ -1014,6 +1040,7 @@ public class Driver {
 				continue;
 			}
 		}
+		sc.close();
 	}
 
 	private static void addPeriod(Connector c) {
@@ -1066,12 +1093,46 @@ public class Driver {
 				continue;
 			}
 		}
+		sc.close();
 	}
 
-	private static ArrayList<String> getVisit(Connector c) {
+	private static void getVisit(Connector c) {
 		ArrayList<String> result = new ArrayList<String>();
 		Visit v = new Visit();
 		result = v.getVisit(-1, login, c.stmt);
-		return result;
+		for(String s: result){
+		System.out.println(s);	
+		}
+		
+	}
+	
+	private static void toptrusted(Connector c) {
+		ArrayList<String[]> result = new ArrayList<String[]>();
+		Scanner sc = new Scanner(System.in);
+		while (true) {
+	System.out.println("Please input amount you want to limit, ALL for all feedbacks, press q to quit");
+			String amount = sc.nextLine();
+			if (!amount.equalsIgnoreCase("ALL")) {
+				try {
+					Integer.parseInt(amount);
+				} catch (Exception e) {
+					System.out.println("Please input valid number");
+					continue;
+				}
+			}
+				if (amount.equalsIgnoreCase("ALL")) {
+					Users u = new Users();
+					result = u.getTrustedUsers(c.stmt, amount);
+				}
+				Users u = new Users();
+				result = u.getTrustedUsers(c.stmt, amount);
+				break;
+			}
+		
+		sc.close();
+		for(String[] s: result){
+			System.out.println("name: " + s[0]+ " login " + s[1] + " total trust " + s[2]);
+		}
+		
 	}
 }
