@@ -775,8 +775,8 @@ public class Driver {
 				System.out.println("Please input valid number");
 				continue;
 			}
-			System.out.println("Please input date you want to check in mm/dd/yyyy format");
-			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+			System.out.println("Please input date you want to check in dd-MM-yyyy format"); ///////////
+			DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 			String fromstr = sc.nextLine();
 
 			try {

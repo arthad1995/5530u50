@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Visit {
+	
+	//check good
 	public boolean addVisit( Date from, Date to, int r_id,Statement stmt) {
 		Reserve r = new Reserve();
 		//new connection????
@@ -17,9 +19,10 @@ public class Visit {
 			}
 		}
 		
-		String sql = "insert into Visit (from, to, r_id) " + "VALUES ('" + from + "', '" + to + "', '"
+		String sql = "insert into Visit (Visit.from, Visit.to, Visit.r_id) " + "VALUES ('" + from + "', '" + to + "', '"
 				+ r_id  + "');";
 
+		System.out.println(sql);
 		int success = 0;
 		// System.out.println("executing "+ sql);
 		try {

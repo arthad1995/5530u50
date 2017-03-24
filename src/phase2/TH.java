@@ -5,11 +5,13 @@ import java.util.Date;
 import java.sql.*;
 
 public class TH {
-	public boolean newTH(String login,String name, String city, String state,String address, int yearbuild, String telephone, String keyword, double price,
-			String url, String category, Statement stmt) {
-		String sql = "insert into TH (name, address, url, telephone, yearBuilt, price, category,keyword,city,state,login) " + "values ('"
-				+ name + "','" + address + "','" + url + "','" + telephone + "','" + yearbuild + "','" + price + "','"
-				+ category + "','" + keyword + "','" + city + "','" + state+"','" + login+"');";
+	
+	/**good check, mod try*/
+	public boolean newTH(String login, String name, String city, String state, String address, int yearbuild,
+			String telephone, String keyword, double price, String url, String category, Statement stmt) {
+		String sql = "insert into TH (name, address, url, telephone, yearBuilt, price, category,keyword,city,state,login) "
+				+ "values ('" + name + "','" + address + "','" + url + "','" + telephone + "','" + yearbuild + "','"
+				+ price + "','" + category + "','" + keyword + "','" + city + "','" + state + "','" + login + "');";
 		int result = 0;
 		try {
 			result = stmt.executeUpdate(sql);
@@ -26,8 +28,9 @@ public class TH {
 		return false;
 	}
 
+	/**good check*/
 	public boolean updateTH(int h_id, String updateField, String updateValue, Statement stmt) {
-		String sql = "UPDATE TH " + "set " + updateField + "='" + updateValue + "'" + " where h_id='" + h_id + "';";
+		String sql = "UPDATE TH " + "set " + updateField + " = '" + updateValue + "'" + " where h_id= " + h_id + ";";
 
 		int rs = 0;
 		try {
@@ -44,6 +47,7 @@ public class TH {
 		return false;
 	}
 
+	//leave
 	public ArrayList<Integer> geth_id(String name, Statement stmt) {
 
 		ArrayList<Integer> resultList = new ArrayList<Integer>();
@@ -66,6 +70,7 @@ public class TH {
 		return resultList;
 	}
 
+	/**check good*/
 	public ArrayList<String> getCategories(Statement stmt) {
 		ArrayList<String> categories = new ArrayList<String>();
 
@@ -164,7 +169,7 @@ public class TH {
 
 	public ArrayList<String[]> getHighestRate(String amount, Statement stmt) {
 		ArrayList<String[]> result = new ArrayList<String[]>();
-		String[] arr ;
+		String[] arr;
 		String sql = "select * from TH t, " + "Feedback f where t.h_id = f.h_id group by t.category"
 				+ "having (select AVG(f.score) as AverageRate order by (AverageRate) limit " + amount + ")" + ";";
 		ResultSet rs = null;
@@ -338,7 +343,7 @@ public class TH {
 			try {
 				rs = stmt.executeQuery(sql);
 				while (rs.next()) {
-					result.add(rs.getString("h_id") +"\t"+ rs.getString("login") + "\t"  + rs.getString("category")
+					result.add(rs.getString("h_id") + "\t" + rs.getString("login") + "\t" + rs.getString("category")
 							+ "\t" + rs.getString("address") + "\t" + rs.getString("city") + "\t"
 							+ rs.getString("state") + "\t" + rs.getString("price") + "\t" + rs.getString("name") + "\t"
 							+ rs.getString("telephone") + "\t" + rs.getString("keyword") + "\t"

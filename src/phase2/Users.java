@@ -8,6 +8,7 @@ public class Users {
 		// Default constructor
 	}
 
+	/**good check*/
 	public void newUser(String login, String name, String userType, String contact_Num, String Address, String password,
 			Statement st) throws SQLException {
 		String sql = "insert into Users (login, name, userType, contact_Num, Address, password) " + "Values ('" + login
@@ -24,6 +25,7 @@ public class Users {
 		}
 	}
 
+	/**GOOD CHECK*/
 	public String isLoginMatch(String login, String password, Statement st) {
 		String sql = "select login, password, userType from Users where login = '" + login + "';";
 		ResultSet rs = null;
@@ -56,7 +58,7 @@ public class Users {
 			return type;
 	}
 
-	
+	/**good check*/
 	public ArrayList<String[]> getTrustedUsers(Statement st, String amount) {
 		String[] trusted;
 		ArrayList<String[]> array = new ArrayList<String[]>();
@@ -119,6 +121,7 @@ public class Users {
 	 * } }
 	 */
 
+	/**check good*/
 	public void trustRecording(String login1, String login2, boolean isTrusted, Statement st) {
 		int trustVal;
 		if (isTrusted)
@@ -136,6 +139,7 @@ public class Users {
 
 	}
 
+	/*good check*/
 	public String getUserLogin(String name, String contact_Num, Statement st) {
 		ResultSet rs = null;
 		String login = "";
@@ -165,7 +169,6 @@ public class Users {
 		// }
 
 		return login;
-
 	}
 
 	public ArrayList<String> getOneDegreeSeperation(String login, Statement st) {
