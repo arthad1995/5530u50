@@ -37,7 +37,33 @@ public class tester {
 			String keyword = generateString(r, "qwertyuioopasdfghjklzxcvbnm", r.nextInt(20));
 			String url = generateString(r, "qwertyuioopasdfghjklzxcvbnm", r.nextInt(20));
 			String category = generateString(r, "qwertyuioopasdfghjklzxcvbnm", r.nextInt(10));
-			login = "User" + i;
+			login = "User" + r.nextInt(11);
+			SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+			java.util.Date start = df.parse("05-01-2013");
+			java.sql.Date sqpdate = new java.sql.Date(start.getTime());
+			
+			java.util.Date end = df.parse("05-01-2013");
+			java.sql.Date enddate = new java.sql.Date(end.getTime());
+			java.sql.Date currentdate = new java.sql.Date(new Date().getTime());
+			//f.giveFeedback(r.nextInt(6), login, "well", r.nextInt(11),currentdate , c.stmt);
+			ArrayList<String> rrr =t.filter("category", 0, 10000, "condo", "st", "desc", c.stmt);
+			
+			ArrayList<String> result = t.filter("address", 0, 10000, "slc", "st", "desc", c.stmt);
+			if (result.isEmpty()) {
+				result = new ArrayList<String>(rrr);
+				
+			}
+	
+			
+			for (String s : result) {
+				if (!rrr.contains(s)) {
+					result.remove(s);
+				}
+			}
+			
+			for(String token:result){
+				System.out.println(token);
+			}
 //		boolean b;
 //			if(r.nextInt(2)==0){
 //				b=false;
@@ -46,16 +72,16 @@ public class tester {
 //				b=true;
 //			u.trustRecording("User"+r.nextInt(10), "User"+r.nextInt(10), b, c.stmt);
 			
-			for(String []arr:u.getTrustedUsers(c.stmt, "2")){
-				System.out.println(arr[0] + "\t" + arr[1] + "\t" + arr[2]);
-			}
-			SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy");
-			java.util.Date start = df.parse("05-01-2013");
-			java.sql.Date sqpdate = new java.sql.Date(start.getTime());
-			
-			java.util.Date end = df.parse("05-01-2013");
-			java.sql.Date enddate = new java.sql.Date(end.getTime());
-			java.sql.Date currentdate = new java.sql.Date(new Date().getTime());
+//			for(String []arr:u.getTrustedUsers(c.stmt, "2")){
+//				System.out.println(arr[0] + "\t" + arr[1] + "\t" + arr[2]);
+//			}
+//			SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+//			java.util.Date start = df.parse("05-01-2013");
+//			java.sql.Date sqpdate = new java.sql.Date(start.getTime());
+//			
+//			java.util.Date end = df.parse("05-01-2013");
+//			java.sql.Date enddate = new java.sql.Date(end.getTime());
+//			java.sql.Date currentdate = new java.sql.Date(new Date().getTime());
 		
 			Available a = new Available();
 			Period p = new Period();
