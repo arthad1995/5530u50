@@ -52,90 +52,85 @@ public class Feedback {
 		}
 		return false;
 	}
-	//need rework
+	//good check
 	public ArrayList<String> getTHFeedback(int h_id, String amount, Statement stmt) {
 		ArrayList<String> result = new ArrayList<String>();
-		ArrayList<Integer> fidList = new ArrayList<Integer>();
+		ArrayList<String> fidList = new ArrayList<String>();
+		ArrayList<String> usefuleList = new ArrayList<String>();
+		for(String ss:gettopUserful("all", stmt)){
+			usefuleList.add(ss.split("\t")[0]);
+		}
 		// Rating query
 		if (amount.equals("all")) {
-			String sql = "select r.f_id,(r.rating) as average from Feedback f,Rate r "
-					+ " where f.h_id= " + h_id
-					+ " and r.f_id = f.h_id group by (r.rating) order by average;";
+			String sql = "select * from Feedback f "
+					+ " where f.h_id= " + h_id+";";
 
 			ResultSet rs = null;
 			try {
 				rs = stmt.executeQuery(sql);
 				while (rs.next()) {
-					int temp = -1;
-					temp = rs.getInt("f_id");
+					String temp = "";
+					temp = rs.getString("text") + "\t" + rs.getString("fbdate") + "\t"+
+							rs.getString("score")+  "\t" + rs.getString("login");;
 					fidList.add(temp);
 				}
 			} catch (Exception e) {
 			
 				System.err.println(e.getMessage());
 			}
-			for(int fid:fidList){
-				sql = "select * from Feedback f"+
-						"where f.f_id = " + fid +";";
-			}
-			
-			 rs = null;
-			try {
-				rs = stmt.executeQuery(sql);
-				while (rs.next()) {
-					String ss = rs.getString("text") + "\t" + rs.getString("fbdate") + "\t"+
-							rs.getString("score")+  "\t" + rs.getString("login");
-							result.add(ss);
-							
+			for(int i = 0 ; i <usefuleList.size();i++){
+				String t = usefuleList.get(i);
+				for(int j = 0; j < fidList.size(); j++){
+					if(fidList.get(j).split("\t")[3].equals(t)){
+						result.add(fidList.get(j));
+						fidList.remove(j);
+					}
 				}
-	
-			} catch (Exception e) {
-			
-				System.err.println(e.getMessage());
 			}
-			
+			result.addAll(fidList);
+			System.out.println("text\tfbdate\t\tscore\tlogin\n");
+			for(String s : result){
+				System.out.println(s);
+			}
 			return result;
 		} else {
 			int count = Integer.parseInt(amount);
-			String sql =  "select r.f_id,avg(r.rating) as average from Feedback f,Rate r "
-					+ " where f.h_id = " + h_id
-					+ " and f.f_id = r.f_id group by (f.f_id) order by average"
-					+ " limit " + count;
+			String sql = "select * from Feedback f "
+					+ " where f.h_id= " + h_id+";";
+
 			ResultSet rs = null;
 			try {
 				rs = stmt.executeQuery(sql);
-				
 				while (rs.next()) {
-					int temp = -1;
-					temp = rs.getInt("f_id");
+					String temp = "";
+					temp = rs.getString("text") + "\t" + rs.getString("fbdate") + "\t"+
+							rs.getString("score")+  "\t" + rs.getString("login");;
 					fidList.add(temp);
-					
 				}
-		
 			} catch (Exception e) {
-				
+			
 				System.err.println(e.getMessage());
 			}
-			for(int fid:fidList){
-				sql = "select * from Feedback f "+
-						"where f.f_id = " + fid +";";
-			}
+			for(int i = 0 ; i<count&&i <usefuleList.size();i++){
 			
-			 rs = null;
-			try {
-				rs = stmt.executeQuery(sql);
-				while (rs.next()) {
-					String ss = rs.getString("text") + "\t" + rs.getString("fbdate") + "\t"+
-							rs.getString("score")+  "\t" + rs.getString("login");
-							result.add(ss);
-							System.out.println(ss);
+				String t = usefuleList.get(i);
+				for(int j = 0; j < fidList.size(); j++){
+					if(fidList.get(j).split("\t")[3].equals(t)){
+						result.add(fidList.get(j));
+						fidList.remove(j);
+					}
 				}
-	
-			} catch (Exception e) {
-				
-				System.err.println(e.getMessage());
 			}
 			
+			if(result.size()<count){
+				for(int i = 0;i<fidList.size()&&i<(count-result.size());i++){
+					result.add(fidList.get(i));
+				}
+			}
+			System.out.println("text\tfbdate\t\tscore\tlogin\n");
+			for(String s : result){
+				System.out.println(s);
+			}
 			return result;
 		}
 	}
@@ -165,51 +160,51 @@ public class Feedback {
 		return false;
 	}
 
-	public ArrayList<String> getrate(int h_id, String amount, Statement stmt) {
-		ArrayList<String> result = new ArrayList<String>();
-
-		// Rating query
-		if (amount.equals("all")) {
-			String sql = "select distinct r.login, AVG(r.rating) as averageRating from Rates r" + " group by (r.login)"
-					+ " order by averageRating" + ";";
-
-			ResultSet rs = null;
-			try {
-				rs = stmt.executeQuery(sql);
-				while (rs.next()) {
-					String temp = "";
-					temp = rs.getString("text") + "\t" + rs.getString("score");
-					result.add(temp);
-				}
-				return result;
-			} catch (Exception e) {
-
-				System.err.println(e.getMessage());
-			}
-			return result;
-		} else {
-			int count = Integer.parseInt(amount);
-			String sql = "select distinct f.text, f.score from Rates r, Feedback f"
-					+ " where f.fid IN (select AVG(rating) as average,f_id from " + "Feedback where h_id = " + h_id
-					+ ")" + " order by average" + " limit " + count + ";";
-
-			ResultSet rs = null;
-			// System.out.println("executing "+sql);
-			try {
-				rs = stmt.executeQuery(sql);
-				while (rs.next()) {
-					String temp;
-					temp = rs.getString("text") + "\t" + rs.getString("score");
-					result.add(temp);
-				}
-				return result;
-			} catch (Exception e) {
-				System.err.println(e.getMessage());
-			}
-
-			return result;
-		}
-	}
+//	public ArrayList<String> getrate(int h_id, String amount, Statement stmt) {
+//		ArrayList<String> result = new ArrayList<String>();
+//
+//		// Rating query
+//		if (amount.equals("all")) {
+//			String sql = "select login, avg(rating) as average from Rate" + " group by (r.login)"
+//					+ " order by average desc" + ";";
+//
+//			ResultSet rs = null;
+//			try {
+//				rs = stmt.executeQuery(sql);
+//				while (rs.next()) {
+//					String temp = "";
+//					temp = rs.getString("text") + "\t" + rs.getString("score");
+//					result.add(temp);
+//				}
+//				return result;
+//			} catch (Exception e) {
+//
+//				System.err.println(e.getMessage());
+//			}
+//			return result;
+//		} else {
+//			int count = Integer.parseInt(amount);
+//			String sql = "select login, avg(rating) as average from Rate" + " group by (r.login)"
+//					+ " order by average desc" + " limit " + count + ";";
+//
+//			ResultSet rs = null;
+//			// System.out.println("executing "+sql);
+//			try {
+//				rs = stmt.executeQuery(sql);
+//				while (rs.next()) {
+//					String temp;
+//					temp = rs.getString("login")+"\t"+rs.getString("text") + "\t" + rs.getString("score");
+//					System.out.println(temp);
+//					result.add(temp);
+//				}
+//				return result;
+//			} catch (Exception e) {
+//				System.err.println(e.getMessage());
+//			}
+//
+//			return result;
+//		}
+//	}
 	//good check
 	private boolean checkRate(int f_id, String login, Statement stmt) {
 
@@ -230,20 +225,19 @@ public class Feedback {
 		return false;
 	}
 
+	//good check
 	public ArrayList<String> gettopUserful(String amount, Statement stmt) {
 		ArrayList<String> result = new ArrayList<String>();
-
-		// Rating query
-		if (amount.equalsIgnoreCase("all")) {
-			String sql = "select distinct r.login, AVG(r.rating) as averageRating from Rates r" + " group by (r.login)"
-					+ " order by averageRating" + ";";
+		if (amount.equals("all")) {
+			String sql = "select login, avg(rating) as average from Rate" + " group by (login)"
+					+ " order by average desc" + ";";
 
 			ResultSet rs = null;
 			try {
 				rs = stmt.executeQuery(sql);
 				while (rs.next()) {
 					String temp = "";
-					temp = rs.getString("text") + "\t" + rs.getString("score");
+					temp = rs.getString("login") + "\t" + rs.getString("average");
 					result.add(temp);
 				}
 				return result;
@@ -253,24 +247,26 @@ public class Feedback {
 			}
 			return result;
 		} else {
-			String sql = "select distinct r.login, AVG(r.rating) as averageRating from Rates r" + " group by (r.login)"
-					+ " order by averageRating limit " + Integer.parseInt(amount) + ";";
+			int count = Integer.parseInt(amount);
+			String sql = "select login, avg(rating) as average from Rate" + " group by (login)"
+					+ " order by average desc" + " limit " + count + ";";
 
 			ResultSet rs = null;
+			// System.out.println("executing "+sql);
 			try {
 				rs = stmt.executeQuery(sql);
 				while (rs.next()) {
-					String temp = "";
-					temp = rs.getString("text") + "\t" + rs.getString("score");
+					String temp;
+					temp = rs.getString("login")+ rs.getString("average");
+					System.out.println(temp);
 					result.add(temp);
 				}
 				return result;
 			} catch (Exception e) {
-
 				System.err.println(e.getMessage());
 			}
+
 			return result;
 		}
-
 	}
 }

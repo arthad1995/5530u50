@@ -5,11 +5,13 @@ import java.util.Date;
 import java.sql.*;
 
 public class TH {
-	public boolean newTH(String login,String name, String city, String state,String address, int yearbuild, String telephone, String keyword, double price,
-			String url, String category, Statement stmt) {
-		String sql = "insert into TH (name, address, url, telephone, yearBuilt, price, category,keyword,city,state,login) " + "values ('"
-				+ name + "','" + address + "','" + url + "','" + telephone + "','" + yearbuild + "','" + price + "','"
-				+ category + "','" + keyword + "','" + city + "','" + state+"','" + login+"');";
+	
+	/**good check, mod try*/
+	public boolean newTH(String login, String name, String city, String state, String address, int yearbuild,
+			String telephone, String keyword, double price, String url, String category, Statement stmt) {
+		String sql = "insert into TH (name, address, url, telephone, yearBuilt, price, category,keyword,city,state,login) "
+				+ "values ('" + name + "','" + address + "','" + url + "','" + telephone + "','" + yearbuild + "','"
+				+ price + "','" + category + "','" + keyword + "','" + city + "','" + state + "','" + login + "');";
 		int result = 0;
 		try {
 			result = stmt.executeUpdate(sql);
@@ -26,8 +28,11 @@ public class TH {
 		return false;
 	}
 
+	/**good check*/
 	public boolean updateTH(int h_id, String updateField, String updateValue, Statement stmt) {
+
 		String sql = "UPDATE TH " + "set '" + updateField + "'='" + updateValue + "'" + " where h_id='" + h_id + "';";
+
 
 		int rs = 0;
 		try {
@@ -44,6 +49,7 @@ public class TH {
 		return false;
 	}
 
+	//leave
 	public ArrayList<Integer> geth_id(String name, Statement stmt) {
 
 		ArrayList<Integer> resultList = new ArrayList<Integer>();
@@ -66,6 +72,7 @@ public class TH {
 		return resultList;
 	}
 
+	/**check good*/
 	public ArrayList<String> getCategories(Statement stmt) {
 		ArrayList<String> categories = new ArrayList<String>();
 
@@ -164,7 +171,7 @@ public class TH {
 
 	public ArrayList<String[]> getHighestRate(String amount, Statement stmt) {
 		ArrayList<String[]> result = new ArrayList<String[]>();
-		String[] arr ;
+		String[] arr;
 		String sql = "select * from TH t, " + "Feedback f where t.h_id = f.h_id group by t.category"
 				+ "having (select AVG(f.score) as AverageRate order by (AverageRate) limit " + amount + ")" + ";";
 		ResultSet rs = null;
@@ -326,19 +333,11 @@ public class TH {
 			String sql = "select * from TH" + " where Price< " + max + " and price< " + min;
 			if (sort.equals("p")) {
 				sql = sql + " order by " + "Price" + increase + ";";
-			} else if (sort.equals("s")) {
-				sql = sql + " group by (h_id) having (select h_id, AVG(score) AS average)"
-						+ "from Feedback group by h_id)" + "order by average " + increase + ";";
-			} else if (sort.equals("st")) {
-				sql = "select * from TH th ,Trust t, Users u,Feedback f where t.login2 = u.login and "
-						+ "f.login = t.login2" + "Price< " + max + " and price< " + min + " group by (f.h_id) having "
-						+ " (select h_id, AVG(score) AS average" + "where sum(t.isTrusted) > 0" + "order by average "
-						+ increase + ";";
 			}
 			try {
 				rs = stmt.executeQuery(sql);
 				while (rs.next()) {
-					result.add(rs.getString("h_id") +"\t"+ rs.getString("login") + "\t"  + rs.getString("category")
+					result.add(rs.getString("h_id") + "\t" + rs.getString("login") + "\t" + rs.getString("category")
 							+ "\t" + rs.getString("address") + "\t" + rs.getString("city") + "\t"
 							+ rs.getString("state") + "\t" + rs.getString("price") + "\t" + rs.getString("name") + "\t"
 							+ rs.getString("telephone") + "\t" + rs.getString("keyword") + "\t"
@@ -349,6 +348,17 @@ public class TH {
 			catch (Exception e) {
 				System.err.println(e.getMessage());
 			}
+			
+		  if (sort.equals("s")) {
+				sql = sql + " group by (h_id) having (select h_id, AVG(score) AS average)"
+						+ "from Feedback group by h_id)" + "order by average " + increase + ";";
+			} else if (sort.equals("st")) {
+				sql = "select * from TH th ,Trust t, Users u,Feedback f where t.login2 = u.login and "
+						+ "f.login = t.login2" + "Price< " + max + " and price< " + min + " group by (f.h_id) having "
+						+ " (select h_id, AVG(score) AS average" + "where sum(t.isTrusted) > 0" + "order by average "
+						+ increase + ";";
+			}
+			
 			return result;
 		} else {
 			ResultSet rs = null;
@@ -382,5 +392,27 @@ public class TH {
 			}
 			return result;
 		}
+	}
+	private ArrayList<String> avgScore(String sort,Statement stmt){
+		ArrayList<String> result = new ArrayList<String>();
+		
+			String sql =  "select f.h_id, avg (f.score) as average from TH t, Feedback f "+
+					"where t.h_id=f.h_id "+
+					"group by f.h_id "+
+					"order by avg(f.score) desc";
+			ResultSet rs = null;
+			try {
+				rs = stmt.executeQuery(sql);
+				System.out.println(sql);
+				while (rs.next()) {
+					result.add(rs.getString("h_id") +"\t"+ rs.getString("average"));
+				}
+			}
+			catch (Exception e) {
+				System.err.println(e.getMessage());
+			}
+		
+		
+		return result;
 	}
 }

@@ -6,9 +6,10 @@ import java.util.ArrayList;
 
 public class Available {
 
+	//good check, mod try
 	public boolean addAvilable(int h_id, int p_id, double price_per_night, Statement stmt) {
-		String sql = "insert into Visit (h_id, p_id, price_per_night) " + "VALUES (" + h_id + ", " + p_id + ", "
-				+ price_per_night + ");";
+		String sql = "insert into Available (h_id, p_id, price_per_night) " + "VALUES ('" + h_id + "', '" + p_id + "', '"
+				+ price_per_night + "');";
 
 		int success = 0;
 		try {

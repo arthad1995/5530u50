@@ -26,7 +26,6 @@ public class tester {
 		TH t = new TH();
 		Users u = new Users();
 		Reserve res = new Reserve();
-		ArrayList loginlist = new ArrayList<String>();
 		for(int i = 0; i < 1; i++){
 			Random r = new Random();
 			String l = generateString(r, "qwertyuioopasdfghjklzxcvbnm", r.nextInt(10));
@@ -38,18 +37,40 @@ public class tester {
 			String keyword = generateString(r, "qwertyuioopasdfghjklzxcvbnm", r.nextInt(20));
 			String url = generateString(r, "qwertyuioopasdfghjklzxcvbnm", r.nextInt(20));
 			String category = generateString(r, "qwertyuioopasdfghjklzxcvbnm", r.nextInt(10));
+			login = "User" + i;
+//		boolean b;
+//			if(r.nextInt(2)==0){
+//				b=false;
+//			}
+//			else
+//				b=true;
+//			u.trustRecording("User"+r.nextInt(10), "User"+r.nextInt(10), b, c.stmt);
 			
-		//	u.newUser(login, name, "user", phone, add, "k", c.stmt);
-			SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-			java.util.Date start = df.parse("01-05-2013");
+			for(String []arr:u.getTrustedUsers(c.stmt, "2")){
+				System.out.println(arr[0] + "\t" + arr[1] + "\t" + arr[2]);
+			}
+			SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+			java.util.Date start = df.parse("05-01-2013");
 			java.sql.Date sqpdate = new java.sql.Date(start.getTime());
 			
-			java.util.Date end = df.parse("01-07-2013");
-			java.sql.Date enddate = new java.sql.Date(start.getTime());
+			java.util.Date end = df.parse("05-01-2013");
+			java.sql.Date enddate = new java.sql.Date(end.getTime());
 			java.sql.Date currentdate = new java.sql.Date(new Date().getTime());
-			res.addReserve(login, r.nextInt(6), 484, sqpdate, enddate, currentdate, c.stmt);
-//			t.newTH(login, name, city, state, add, 1995, phone, keyword, r.nextInt(2000), 
-//					url, category, c.stmt);
+		
+			Available a = new Available();
+			Period p = new Period();
+			//f.getTHFeedback(3, "all", c.stmt);
+			//f.giveFeedback(r.nextInt(7), "y", "good", r.nextInt(10), currentdate, c.stmt);
+			//f.getTHFeedback(3, "5", c.stmt);
+		//	f.rateFeedback("tb", r.nextInt(26), r.nextInt(3), c.stmt);
+			int h = 5;
+		//	p.addPeriod(sqpdate, enddate, c.stmt);
+		//	a.addAvilable(h, 47, 898.0, c.stmt);
+		//	res.addReserve(login, h, 484, sqpdate, enddate, currentdate, c.stmt);
+			Visit v = new Visit();
+	//		v.addVisit(sqpdate, enddate, 2, c.stmt);
+	//		t.newTH(login, name, city, state, add, 1995, phone, keyword, r.nextInt(2000), 
+	//				url, "house", c.stmt);
 		}
 		
 		//f.getTHFeedback(0, "5", c.stmt);

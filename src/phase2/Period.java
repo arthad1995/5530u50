@@ -9,11 +9,14 @@ public class Period {
 	public Period() {
 	}
 
+	/**good check, mod try*/
 	public void addPeriod(Date from, Date to, Statement st) {
-		String sql = "insert into Period (from, to) Values ('" + from + "', '" + to + "');";
+		String sql = "insert into Period (Period.from, Period.to) Values ('" + from + "', '" + to + "');";
+	//	System.out.println(sql);
 		try {
 			st.executeUpdate(sql);
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 
 		} catch (Exception e) {
 
