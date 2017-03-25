@@ -15,16 +15,15 @@ public class Reserve {
 		Date to1 = new Date();
 		ResultSet rs = null;
 		boolean check = false;
-		
 		try {
 			rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
 				from1 = rs.getDate("from");
 				to1 = rs.getDate("to");
+
 				if ((from1.after(rs.getDate("from")) && to1.before(rs.getDate("to")))
 						|| (from1.equals(rs.getDate("from")) && to1.equals(rs.getDate("to")))) {
-					
 					check = true;
 				}
 
@@ -33,36 +32,34 @@ public class Reserve {
 			System.out.println(e.getMessage());
 		}
 		if (!check) {
-		System.out.println("Room is not available");
+			// System.out.println("outttttttttttt");
 			return false;
 		}
 
-		sql = "select * from Reserve r where" + " r.login = '" + login + "' and r.from = '" + from1 + "' and r.to = '"
-				+ to1 + "';";
+		sql = "select * from Reserve r where" + " r.login = '" + login + "' and r.from = '" + from + "' and r.to = '"
+				+ to + "';";
 
 		rs = null;
-		
+		int count = 0;
 		try {
 			rs = stmt.executeQuery(sql);
-
-			while (rs.next()) {
-				if(rs.getInt("h_id")==h_id){
-					System.out.println("can't reserve in same time");
-					return false;
-				}
-
-			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+		} finally {
+			try {
+				if (rs != null & !rs.isClosed())
+					rs.close();
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+			}
 		}
-//		if (count > 0) {
-//			System.out.println("can't reserve in same time");
-//			return false;
-//		}
+		if (count > 0) {
+			return false;
+		}
 
 		int success = 0;
 		sql = "insert into Reserve (Reserve.login, Reserve.h_id, Reserve.cost, Reserve.from, Reserve.to, Reserve.reserve_date) "
-				+ "VALUES ('" + login + "', '" + h_id + "', '" + cost + "', '" + from1 + "', '" + to1 + "', '"
+				+ "VALUES ('" + login + "', '" + h_id + "', '" + cost + "', '" + from + "', '" + to + "', '"
 				+ reserve_date + "');";
 		// System.out.println(sql);
 
@@ -80,7 +77,7 @@ public class Reserve {
 		return false;
 	}
 
-	//check good
+	// check good
 	public ArrayList<Date[]> getReserveDate(int r_id, String login, Statement stmt) {
 		ArrayList<Date[]> result = new ArrayList<Date[]>();
 		Date[] arr = new Date[2];
@@ -96,6 +93,13 @@ public class Reserve {
 				}
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
+			} finally {
+				try {
+					if (rs != null & !rs.isClosed())
+						rs.close();
+				} catch (Exception e) {
+					System.err.println(e.getMessage());
+				}
 			}
 		} else {
 			String sql = "select * from Reserve r" + "where" + "r.login  =" + login;
@@ -109,12 +113,19 @@ public class Reserve {
 				}
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
+			} finally {
+				try {
+					if (rs != null & !rs.isClosed())
+						rs.close();
+				} catch (Exception e) {
+					System.err.println(e.getMessage());
+				}
 			}
 		}
 		return result;
 	}
 
-	//check good
+	// check good
 	public ArrayList<String> getReserve(int r_id, String login, Statement stmt) {
 		ArrayList<String> result = new ArrayList<String>();
 		if (r_id != -1) {
@@ -128,6 +139,13 @@ public class Reserve {
 				}
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
+			} finally {
+				try {
+					if (rs != null & !rs.isClosed())
+						rs.close();
+				} catch (Exception e) {
+					System.err.println(e.getMessage());
+				}
 			}
 		} else {
 			String sql = "select * from Reserve r" + "where" + "r.login  =" + login;
@@ -140,7 +158,15 @@ public class Reserve {
 				}
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
+			} finally {
+				try {
+					if (rs != null & !rs.isClosed())
+						rs.close();
+				} catch (Exception e) {
+					System.err.println(e.getMessage());
+				}
 			}
+
 		}
 		return result;
 	}
