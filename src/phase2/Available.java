@@ -6,10 +6,10 @@ import java.util.ArrayList;
 
 public class Available {
 
-	//good check, mod try
+	// good check, mod try
 	public boolean addAvilable(int h_id, int p_id, double price_per_night, Statement stmt) {
-		String sql = "insert into Available (h_id, p_id, price_per_night) " + "VALUES ('" + h_id + "', '" + p_id + "', '"
-				+ price_per_night + "');";
+		String sql = "insert into Available (h_id, p_id, price_per_night) " + "VALUES ('" + h_id + "', '" + p_id
+				+ "', '" + price_per_night + "');";
 
 		int success = 0;
 		try {
@@ -26,10 +26,11 @@ public class Available {
 		return false;
 	}
 
+	//check good
 	public ArrayList<String> getAvilable(int h_id, int p_id, Statement stmt) {
 		ArrayList<String> result = new ArrayList<String>();
 
-		String sql = "select * from Avilable " + "where h_id = " + h_id + " and " + "p_id = " + p_id + ";";
+		String sql = "select * from Available " + "where h_id = " + h_id + " and " + "p_id = " + p_id + ";";
 		ResultSet rs = null;
 		try {
 			rs = stmt.executeQuery(sql);
@@ -38,6 +39,14 @@ public class Available {
 			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
+		} finally {
+			try {
+				if (!rs.isClosed() && rs != null)
+					rs.close();
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+			}
+
 		}
 
 		return result;

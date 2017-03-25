@@ -68,7 +68,7 @@ public class Driver {
 			}
 			
 		}
-	
+		sc.close();
 	}
 
 	public static void showAdminPage(Connector c) {
@@ -319,7 +319,7 @@ public class Driver {
 
 		Users user = new Users();
 		user.newUser(login, name, userType, contact_Num, Address, password, c.stmt);
-		// 
+		//sc.close();
 	}
 
 	private static void createNewTH(Connector c) {
@@ -410,7 +410,7 @@ public class Driver {
 				}
 			}
 		}
-	//	 
+		sc.close();
 	}
 
 	private static void filter(Connector con) {
@@ -460,9 +460,7 @@ public class Driver {
 				result = new ArrayList<String>(recevier);
 				break;
 			}
-			for(String s :recevier)
-				System.out.println(s);
-			
+
 			for (String s : result) {
 				if (!recevier.contains(s)) {
 					result.remove(s);
@@ -470,12 +468,9 @@ public class Driver {
 			}
 
 		}
-		for(String s :result){
-			System.out.println(s);
-			System.out.println("herererere");
-		}
-	
-	//	 
+		for(String s :result)
+		System.out.println(s);
+		sc.close();
 	}
 
 	public static void showDegreeSeparation(Connector con) {
@@ -630,7 +625,7 @@ public class Driver {
 		default:
 			break;
 		}
-		 
+		sc.close();
 	}
 
 	public static void manageFavorite(Connector con) {
@@ -734,7 +729,7 @@ public class Driver {
 			}
 
 		}
-		 
+		sc.close();
 	}
 
 	// public static ArrayList<String[]> getpmost(String most, Connector c) {
@@ -822,7 +817,7 @@ public class Driver {
 			}
 			break;
 		}
-		 
+		sc.close();
 	}
 
 	private static void giveFeedback(Connector c) {
@@ -840,9 +835,9 @@ public class Driver {
 				System.out.println("Please input valid number");
 				continue;
 			}
-			System.out.println("Please input your text feedback");
+			System.out.println("Please input your text feedback, press q to quit");
 			String text = sc.nextLine();
-			System.out.println("Please input your score");
+			System.out.println("Please input your score, press q to quit");
 			String scorestr = sc.nextLine();
 			int score = -1;
 			try {
@@ -852,8 +847,7 @@ public class Driver {
 				continue;
 			}
 			Feedback f = new Feedback();
-			java.sql.Date sqlStartDate = new java.sql.Date(new Date().getTime());  
-			boolean check = f.giveFeedback(h_id, h_idstr, text, score, sqlStartDate, c.stmt);
+			boolean check = f.giveFeedback(h_id, h_idstr, text, score, new Date(), c.stmt);
 			if (check) {
 				System.out.println("You successfully gave feedback");
 				break;
@@ -862,7 +856,7 @@ public class Driver {
 				continue;
 			}
 		}
-		 
+		sc.close();
 	}
 
 	private static void rateFeedback(Connector c) {
@@ -900,7 +894,7 @@ public class Driver {
 				continue;
 			}
 		}
-		 
+		sc.close();
 	}
 
 	private static ArrayList<String> getTHfeedback(Connector c) {
@@ -933,7 +927,7 @@ public class Driver {
 				break;
 			}
 		}
-		 
+		sc.close();
 		return result;
 	}
 
@@ -963,11 +957,11 @@ public class Driver {
 					continue;
 				}
 				Feedback f = new Feedback();
-				result = f.getTHFeedback(h_id, amount, c.stmt);
+				result = f.getrate(h_id, amount, c.stmt);
 				break;
 			}
 		}
-		 
+		sc.close();
 		return result;
 	}
 
@@ -998,7 +992,7 @@ public class Driver {
 			u.trustRecording(login, login2, f, c.stmt);
 			break;
 		}
-		 
+		sc.close();
 	}
 
 	private static void visit(Connector c) {
@@ -1052,7 +1046,7 @@ public class Driver {
 				continue;
 			}
 		}
-		 
+		sc.close();
 	}
 
 	private static void addPeriod(Connector c) {
@@ -1105,7 +1099,7 @@ public class Driver {
 				continue;
 			}
 		}
-		 
+		sc.close();
 	}
 
 	private static void getVisit(Connector c) {
@@ -1142,7 +1136,7 @@ public class Driver {
 				break;
 			}
 		
-		 
+		sc.close();
 		for(String[] s: result){
 			System.out.println("name: " + s[0]+ " login " + s[1] + " total trust " + s[2]);
 		}	
@@ -1171,7 +1165,7 @@ public class Driver {
 				break;
 			}
 		
-		
+		sc.close();
 		for(String s: result){
 			System.out.println(s);
 		}	
