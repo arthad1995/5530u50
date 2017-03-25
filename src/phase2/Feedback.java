@@ -96,7 +96,7 @@ public class Feedback {
 				}
 			}
 			result.addAll(fidList);
-			System.out.println("text\tfbdate\t\tscore\tlogin\n");
+			System.out.println("\ntext\tfbdate\t\tscore\tlogin\n");
 			for (String s : result) {
 				System.out.println(s);
 			}

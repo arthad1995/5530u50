@@ -82,9 +82,9 @@ public class tester {
 	//	System.out.println(sql);
 		
 		Favorites ff = new Favorites();
-		 reserveList = ff.getFavorite("dfgvx", c.stmt);
-		 for(String[] s : reserveList)
-			 System.out.println(s[0] + s[1]);
+//		 reserveList = ff.getFavorite("dfgvx", c.stmt);
+//		 for(String[] s : reserveList)
+//			 System.out.println(s[0] + s[1]);
 		
 //		ff.addFavorite("fried", "sodu", c.stmt);
 //		ff.addFavorite("dwt", "sodu", c.stmt); 	
@@ -92,10 +92,10 @@ public class tester {
 //		ff.addFavorite("dwt", "hotel1", c.stmt);
 //		ff.addFavorite("fried", "hotel1", c.stmt);
 		
-//		ff.addFavorite("dfgvx", "sodu", c.stmt);
-//		ff.addFavorite("dfgvx", "hotel1", c.stmt);
-//		ff.addFavorite("ll", "sodu", c.stmt);
-//		ff.addFavorite("kikwe", "hotel1", c.stmt);
+		ff.addFavorite("dfgvx", "sodu", c.stmt);
+		ff.addFavorite("dfgvx", "hotel1", c.stmt);
+		ff.addFavorite("ll", "sodu", c.stmt);
+		ff.addFavorite("kikwe", "hotel1", c.stmt);
 		
 		
 		
