@@ -646,7 +646,7 @@ public class Driver {
 		while (true) {
 			isfvExists = fv.getFavorite(login, con.stmt);
 			if (isfvExists.size() == 0) {
-				System.out.println("You have not set any TH as your favorite yet, do you want to set it right now?"
+				System.out.println("You have not set any TH name as your favorite yet, do you want to set it right now?"
 						+ " Please type Y or N");
 				while (true) {
 					answer = sc.nextLine();
@@ -705,7 +705,7 @@ public class Driver {
 				}
 				switch (sel) {
 				case 1:
-					System.out.println("Please type your favorite TH to add: ");
+					System.out.println("Please type your favorite TH name to add: ");
 					while (true) {
 						changeName = sc.nextLine();
 						if (changeName.length() == 0) {
@@ -747,31 +747,6 @@ public class Driver {
 		}
 	}
 
-	// public static ArrayList<String[]> getpmost(String most, Connector c) {
-	// ArrayList<String[]> result = null;
-	//// Scanner sc = new Scanner(System.in);
-	// TH th = new TH();
-	//// String amount = sc.nextLine();
-	//// while (true) {
-	//// System.out.println("Please input amount limit here, ALL for TH");
-	//// if (!amount.equalsIgnoreCase("ALL")) {
-	//// try {
-	//// Integer.parseInt(amount);
-	//// } catch (Exception e) {
-	//// System.out.println("Please input valid number");
-	//// continue;
-	//// }
-	//// }
-	//// break;
-	//// }
-	// if (most.equals("pop"))
-	// result = th.getPopularTHs(most, c.stmt);
-	// else if (most.equals("me"))
-	// result = th.getMostExpensiveTHs(most, c.stmt);
-	// else if (most.equals("hr"))
-	// result = th.getHighestRate(Integer.parseInt(most), c.stmt);
-	// return result;
-	// }
 
 	private static void reserve(Connector c) {
 		Scanner sc = new Scanner(System.in);
@@ -819,7 +794,7 @@ public class Driver {
 			Period p = new Period();
 			int p_id = p.getP_id(sqlfrom, sqlto, c.stmt);
 			Available a = new Available();
-			ArrayList<String> arr = a.getAvilable(h_id, p_id, c.stmt); //////////////// here!!!!!!!!!!!!!
+			ArrayList<String> arr = a.getAvilable(h_id, p_id, c.stmt); 
 			if (arr.size() == 0) {
 				System.out.println("Time is not available");
 				continue;
@@ -972,42 +947,6 @@ public class Driver {
 			result = f.getTHFeedback(h_id, amount, c.stmt);
 			break;
 		}
-		return result;
-	}
-
-	private static ArrayList<String> getuserful(Connector c) { //////Unused!!!!!!!!
-		ArrayList<String> result = new ArrayList<String>();
-		Scanner sc = new Scanner(System.in);
-		while (true) {
-			System.out.println("Please input h_id you want to check, press q to quit");
-			String h_idstr = sc.nextLine();
-			if (h_idstr.equalsIgnoreCase("q")) {
-				break;
-			}
-			int h_id = 0;
-			try {
-				h_id = Integer.parseInt(h_idstr);
-			} catch (Exception e) {
-				System.err.println("Please input valid number");
-				continue;
-			}
-			System.out.println("Please input amount you want to limit, ALL for all feedbacks, press q to quit");
-			String amount = sc.nextLine();
-			if (amount.equalsIgnoreCase("q"))
-				break;
-			else if (!amount.equalsIgnoreCase("ALL")) {
-				try {
-					Integer.parseInt(amount);
-				} catch (Exception e) {
-					System.err.println("Please input valid number");
-					continue;
-				}
-				Feedback f = new Feedback();
-				result = f.getTHFeedback(h_id, amount, c.stmt);
-				break;
-			}
-		}
-
 		return result;
 	}
 

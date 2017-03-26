@@ -148,45 +148,6 @@ public class Users {
 
 	}
 
-	/* good check */
-	public String getUserLogin(String name, String contact_Num, Statement st) {
-		ResultSet rs = null;
-		String login = "";
-		int loginCount = 0;
-
-		// ArrayList<String> login = new ArrayList<String>();
-		String sql = "select login from Users where name = '" + name + "' AND contact_Num = '" + contact_Num + "';";
-		try {
-			rs = st.executeQuery(sql);
-			while (rs.next()) {
-				// login.add(rs.getString("login"));
-				login = rs.getString("login");
-				loginCount++;
-			}
-			if (loginCount == 0 || login.equals(""))
-				return ""; // No result founded
-			// rs.close();
-			// if (login.size() < 1)
-			// return null;
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		} finally {
-			try {
-				if (rs != null & !rs.isClosed())
-					rs.close();
-			} catch (Exception e) {
-				System.err.println(e.getMessage());
-			}
-		}
-		// finally {
-		// if(loginCount == 0) return ""; // No result founded
-		// }
-
-		return login;
-	}
-
 	// check good
 	public ArrayList<String> getOneDegreeSeperation(String login, Statement st) {
 		String nameALogin = login;

@@ -36,13 +36,16 @@ public class Reserve {
 			return false;
 		}
 
-		sql = "select * from Reserve r where" + " r.login = '" + login + "' and r.from = '" + from + "' and r.to = '"
+		sql = "select * from Reserve r where r.h_id = " + h_id + " and r.login = '" + login + "' and r.from = '" + from + "' and r.to = '"
 				+ to + "';";
 
 		rs = null;
 		int count = 0;
 		try {
 			rs = stmt.executeQuery(sql);
+			if(rs.next()){
+				count++;
+			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		} finally {
@@ -66,10 +69,10 @@ public class Reserve {
 		try {
 			success = stmt.executeUpdate(sql);
 
-			if (success > 0) {
-				return true;
-			} else {
+			if (success <= 0) {
 				return false;
+			} else {
+				return true;
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

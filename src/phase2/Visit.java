@@ -20,15 +20,15 @@ public class Visit {
 		String sql = "insert into Visit (Visit.from, Visit.to, Visit.r_id) " + "VALUES ('" + from + "', '" + to + "', '"
 				+ r_id + "');";
 		System.out.println(sql);
-		int success = 0;
+		int count = 0;
 		// System.out.println("executing "+ sql);
 		try {
-			success = stmt.executeUpdate(sql);
+			count = stmt.executeUpdate(sql);
 
-			if (success > 0) {
-				return true;
-			} else {
+			if (count <= 0) {
 				return false;
+			} else {
+				return true;
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

@@ -55,38 +55,13 @@ public class Favorites {
 		try {
 			count = stmt.executeUpdate(sql);
 
-			if (count > 0) {
-				return true;
-			} else {
+			if (count <= 0) {
 				return false;
+			} else {
+				return true;
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-		}
-		return false;
-	}
-
-	// delete?
-	public boolean updateFavorite(String login, String changeValue, Statement stmt) {
-
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-		Date date = new Date();
-		String currentDate = dateFormat.format(date);
-
-		String sql = "UPDATE Favorites " + "SET h_id = (select h_id from TH where name ='" + changeValue
-				+ "'), fvdate = '" + currentDate + "'" + " WHERE login='" + login + "';";
-
-		int count = 0;
-		try {
-			count = stmt.executeUpdate(sql);
-
-			if (count > 0) {
-				return true;
-			} else {
-				return false;
-			}
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
 		}
 		return false;
 	}
@@ -102,10 +77,10 @@ public class Favorites {
 		try {
 			count = stmt.executeUpdate(sql);
 
-			if (count > 0) {
-				return true;
-			} else {
+			if (count <= 0) {
 				return false;
+			} else {
+				return true;
 			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage());

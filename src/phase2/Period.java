@@ -18,7 +18,6 @@ public class Period {
 		}
 		String sql = "insert into Period (Period.from, Period.to) Values ('" + from + "', '" + to + "');";
 
-		// System.out.println(sql);
 		try {
 			st.executeUpdate(sql);
 		} catch (SQLException e) {
@@ -89,7 +88,6 @@ public class Period {
 	public int getP_id(Date from, Date to, Statement st) {
 
 		int p_id = -1;
-		// ArrayList<Integer> p_idList = new ArrayList<Integer>();
 		String sql = "SELECT p.p_id from Period p where p.from = '" + from + "' and p.to = '" + to + "';";
 		// System.out.println(sql);
 		int count = 0;

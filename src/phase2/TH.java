@@ -15,10 +15,10 @@ public class TH {
 		int result = 0;
 		try {
 			result = stmt.executeUpdate(sql);
-			if (result > 0) {
-				return true;
-			} else {
+			if (result <= 0) {
 				return false;
+			} else {
+				return true;
 			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
@@ -37,10 +37,10 @@ public class TH {
 		try {
 			rs = stmt.executeUpdate(sql);
 
-			if (rs > 0) {
-				return true;
-			} else {
+			if (rs <= 0) {
 				return false;
+			} else {
+				return true;
 			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage());

@@ -19,10 +19,10 @@ public class Available {
 		try {
 			success = stmt.executeUpdate(sql);
 
-			if (success > 0) {
-				return true;
-			} else {
+			if (success <= 0) {
 				return false;
+			} else {
+				return true;
 			}
 		} catch (Exception e) {
 			System.err.println("Unable to add availabe, the error message has been shown here: " + e.getMessage());

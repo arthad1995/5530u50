@@ -22,10 +22,10 @@ public class Feedback {
 		System.out.println(sql);
 		try {
 			rs = stmt.executeUpdate(sql);
-			if (rs > 0) {
-				return true;
-			} else {
+			if (rs <= 0) {
 				return false;
+			} else {
+				return true;
 			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
@@ -62,10 +62,8 @@ public class Feedback {
 		for (String ss : gettopUserful("all", stmt)) {
 			usefuleList.add(ss.split("\t")[0]);
 		}
-		// Rating query
 		if (amount.equalsIgnoreCase("all")) {
 			String sql = "select * from Feedback f " + " where f.h_id= " + h_id + ";";
-			//System.out.println("sql is " +sql);
 			ResultSet rs = null;
 			try {
 				rs = stmt.executeQuery(sql);
@@ -155,7 +153,6 @@ public class Feedback {
 		}
 		String sql = "insert into Rate (login, f_id, rating) " + "VALUES ('" + login + "', " + f_id + ", " + rating
 				+ ");";
-		//System.out.println(sql);
 		int rs = 0;
 		try {
 			rs = stmt.executeUpdate(sql);
@@ -170,56 +167,6 @@ public class Feedback {
 		}
 		return false;
 	}
-
-	// public ArrayList<String> getrate(int h_id, String amount, Statement stmt)
-	// {
-	// ArrayList<String> result = new ArrayList<String>();
-	//
-	// // Rating query
-	// if (amount.equals("all")) {
-	// String sql = "select login, avg(rating) as average from Rate" + " group
-	// by (r.login)"
-	// + " order by average desc" + ";";
-	//
-	// ResultSet rs = null;
-	// try {
-	// rs = stmt.executeQuery(sql);
-	// while (rs.next()) {
-	// String temp = "";
-	// temp = rs.getString("text") + "\t" + rs.getString("score");
-	// result.add(temp);
-	// }
-	// return result;
-	// } catch (Exception e) {
-	//
-	// System.err.println(e.getMessage());
-	// }
-	// return result;
-	// } else {
-	// int count = Integer.parseInt(amount);
-	// String sql = "select login, avg(rating) as average from Rate" + " group
-	// by (r.login)"
-	// + " order by average desc" + " limit " + count + ";";
-	//
-	// ResultSet rs = null;
-	// // System.out.println("executing "+sql);
-	// try {
-	// rs = stmt.executeQuery(sql);
-	// while (rs.next()) {
-	// String temp;
-	// temp = rs.getString("login")+"\t"+rs.getString("text") + "\t" +
-	// rs.getString("score");
-	// System.out.println(temp);
-	// result.add(temp);
-	// }
-	// return result;
-	// } catch (Exception e) {
-	// System.err.println(e.getMessage());
-	// }
-	//
-	// return result;
-	// }
-	// }
 	// good check
 	private boolean checkRate(int f_id, String login, Statement stmt) {
 
@@ -273,7 +220,6 @@ public class Feedback {
 					+ " order by average desc" + " limit " + count + ";";
 
 			ResultSet rs = null;
-			// System.out.println("executing "+sql);
 			try {
 				rs = stmt.executeQuery(sql);
 				while (rs.next()) {
