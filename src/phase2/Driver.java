@@ -19,7 +19,7 @@ public class Driver {
 			System.out.println("Database connection established");
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.err.println("Unable connect to databse!");
+			System.err.println("Unable connect to databse! Please check your network setting and try again");
 		}
 		mainpage(con);
 	}
@@ -36,11 +36,11 @@ public class Driver {
 			try {
 				option = Integer.parseInt(optionstr);
 			} catch (Exception e) {
-				System.err.println("Please input valid number");
+				System.err.println("Please input a numeric value");
 				continue;
 			}
 			if (option > 3 || option < 1) {
-				System.err.println("Please input valid number");
+				System.err.println("No function found, please input valid number");
 				continue;
 			}
 			if (option == 1) {
@@ -57,16 +57,14 @@ public class Driver {
 				try {
 					newUserRegistration(c);
 				} catch (Exception e) {
-					System.err.println("User login already exist");
+					System.err.println("User login already exist, please choose other login");
 					continue;
 				}
 			} else if (option == 3) {
-				System.out.println("Thanks for using, bye");
+				System.out.println("Thanks for using, hope to see you soon");
 				break;
 			}
-
 		}
-
 	}
 
 	public static void showAdminPage(Connector c) {
@@ -80,18 +78,18 @@ public class Driver {
 			System.out.println("Please enter number 3 to show the degrees of separation");
 			System.out.println("Please enter number 4 for awards");
 			System.out.println("Please enter number 5 for add available time");
-			System.out.println("If you want to exist, enter number 6");
+			System.out.println("If you want to exit, enter number 6");
 			System.out.println("Please make selection: ");
 			while (true) {
 				selection = sc.nextLine();
 				try {
 					s = Integer.parseInt(selection);
 				} catch (Exception e) {
-					System.err.println("Not a valid selection");
+					System.err.println("Not a valid selection, please type a numeric value");
 					continue;
 				}
 				if (selection.length() == 0 || s > 6 || s < 1) {
-					System.out.println("Please enter a valid selection");
+					System.out.println("Please enter a valid number to make selection");
 					continue;
 				} else
 					break;
@@ -119,9 +117,7 @@ public class Driver {
 			default:
 				return;
 			}
-
 		}
-
 	}
 
 	public static void showUserPage(Connector c) {
@@ -133,14 +129,13 @@ public class Driver {
 			System.out.println("Please enter number 1 to start booking your hotel");
 			System.out.println("Please enter number 2 to provide your feedback");
 			System.out.println("Please enter number 3 to modify and update your favorites");
-			System.out.println("Please enter number 4 add visit recoding");
-			System.out.println("Please enter number 5 trust or not trust other users");
-			System.out.println("Please enter number 6 set useful or useless to other feedbacks");
+			System.out.println("Please enter number 4 to add visit recoding");
+			System.out.println("Please enter number 5 to trust or not trust other users");
+			System.out.println("Please enter number 6 to set useful or useless to other feedbacks");
 			System.out.println("Please enter number 7 to request general information (Statistics)");
 			System.out.println("Please enter number 8 to view visit history");
 			System.out.println("Please enter number 9 to check trusted feedbacks");
 			System.out.println("If you want to exist, enter number 10");
-
 			System.out.println("Please make selection: ");
 			while (true) {
 				selection = sc.nextLine();
@@ -151,7 +146,7 @@ public class Driver {
 					continue;
 				}
 				if (selection.length() == 0 || s > 10 || s < 1) {
-					System.out.println("Please enter a valid selection");
+					System.err.println("Please enter a valid selection");
 					continue;
 				} else
 					break;
@@ -160,7 +155,7 @@ public class Driver {
 			case 1:
 				filter(c);
 				while (true) {
-					System.out.println("Type c to check TH's feedback, r for reserve, q for exit");
+					System.out.println("Type c to check TH's feedback, r for reservation, q for exit");
 					String option = sc.nextLine();
 					if (option.equalsIgnoreCase("c")) {
 						getTHfeedback(c);
@@ -170,11 +165,10 @@ public class Driver {
 					} else if (option.equalsIgnoreCase("q")) {
 						break;
 					} else {
-						System.out.println("Please give valid option..");
+						System.err.println("Please give valid option..");
 						continue;
 					}
 				}
-
 				break;
 			case 2:
 				giveFeedback(c);
@@ -201,12 +195,10 @@ public class Driver {
 				toptrusted(c);
 				break;
 			case 10:
-
 			default:
 				return;
 			}
 		}
-
 	}
 
 	public static String[] userLogin(Connector c) {
@@ -228,19 +220,17 @@ public class Driver {
 				} else
 					break;
 			}
-
 			System.out.println("Please enter your password: ");
 			while ((pin = sc.nextLine()).length() == 0) {
 				break;
 			}
-
 			Users user = new Users();
 			type = user.isLoginMatch(userName, pin, c.stmt);
 			if (type.equals("false")) {
-				System.err.println("User name or password is not correct");
-				continue; // don't need, but it's OK to do that
+				System.err.println("User name or password is not correct, please try again");
+				continue;
 			} else {
-				System.out.println("Successfully Logged in!");
+				System.out.println("You have successfully logged in!");
 				break;
 			}
 		}
@@ -252,55 +242,51 @@ public class Driver {
 	}
 
 	public static void newUserRegistration(Connector c) throws SQLException {
-		System.out.println("\n\tWelcome, Please to finish the follow steps to complete your registration");
-		System.out.println("Please select and type your desired user type: user or admin");
+		System.out.println("\n\tWelcome, Please to finish the following steps to complete your registration");
+		System.out.println("Please choose your desired user type: user or admin");
 		Scanner sc = new Scanner(System.in);
 		String name, login, contact_Num, Address, password, confirmPin, userType;
 		while (true) {
 			userType = sc.nextLine();
 			if (userType.length() == 0) {
-				System.out.println("Your user type cannot be empty");
-			} else if (!userType.equals("admin") && !userType.equals("user")) {
-				System.out.println("Please enter a valid user type");
+				System.err.println("Your user type cannot be empty, try again");
+			} else if (!userType.equalsIgnoreCase("admin") && !userType.equalsIgnoreCase("user")) {
+				System.err.println("Please enter a valid user type, try again");
 			} else
 				break;
 		}
-
 		System.out.println("Please type your real full name");
 		while ((name = sc.nextLine()).length() == 0) {
 			if (name.length() == 0) {
-				System.out.println("Your real name cannot be empty");
+				System.err.println("Your real name cannot be empty, please type again");
 				continue;
 			} else
 				break;
 		}
-		System.out.println("Please type your user name");
+		System.out.println("Please type your user name for logging in");
 		while ((login = sc.nextLine()).length() == 0) {
 			if (login.length() == 0) {
-				System.out.println("Please enter a valid user name");
+				System.err.println("Please enter a valid user name");
 				continue;
 			} else
 				break;
 		}
-
 		System.out.println("Please type your telephone number");
 		while ((contact_Num = sc.nextLine()).length() == 0) {
 			if (contact_Num.length() == 0) {
-				System.out.println("Telephone number cannot be empty");
+				System.err.println("Telephone number cannot be empty, type again");
 				continue;
 			} else
 				break;
 		}
-
 		System.out.println("Please type your address");
 		while ((Address = sc.nextLine()).length() == 0) {
 			if (Address.length() == 0) {
-				System.out.println("Your address cannot be empty");
+				System.err.println("Your address cannot be empty, type again");
 				continue;
 			} else
 				break;
 		}
-
 		System.out.println("Please set your password");
 		while ((password = sc.nextLine()).length() == 0) {
 			if (password.length() == 0) {
@@ -309,21 +295,18 @@ public class Driver {
 			} else
 				break;
 		}
-
 		while (true) {
 			System.out.println("Please confirm your password");
 			confirmPin = sc.nextLine();
 			if (confirmPin.length() == 0) {
-				System.out.println("Your confirm password cannot be empty");
+				System.err.println("Your confirm password cannot be empty");
 			} else if (!password.equals(confirmPin)) {
-				System.out.println("Your password does not match...");
+				System.err.println("Your password does not match... Please confirm again");
 			} else
 				break;
 		}
-
 		Users user = new Users();
 		user.newUser(login, name, userType, contact_Num, Address, password, c.stmt);
-		//
 	}
 
 	private static void createNewTH(Connector c) {
@@ -333,12 +316,11 @@ public class Driver {
 			String name = sc.nextLine();
 			System.out.println("Please input TH address");
 			String address = sc.nextLine();
-			System.out.println("Please city of TH");
+			System.out.println("Please type the city name of TH");
 			String city = sc.nextLine();
-			System.out.println("Please state of TH");
+			System.out.println("Please type the state name of TH");
 			String state = sc.nextLine();
 			System.out.println("Please input year of TH (in yyyy format)");
-
 			String yearstr = sc.nextLine();
 			int year = 0;
 			try {
@@ -346,11 +328,10 @@ public class Driver {
 				// String newDateString = df.format(startDate);
 				// System.out.println(newDateString);
 			} catch (Exception e) {
-				System.out.println("invalid date format");
+				System.err.println("Invalid date format");
 				e.printStackTrace();
 				continue;
 			}
-
 			System.out.println("Please telephone year of TH");
 			String telephone = sc.nextLine();
 			System.out.println("Please keyword of TH");
@@ -361,10 +342,9 @@ public class Driver {
 			try {
 				price = Double.parseDouble(pricestr);
 			} catch (Exception e) {
-				System.out.println("Please input valid number");
+				System.err.println("Please input valid number");
 				continue;
 			}
-
 			System.out.println("Please url of TH");
 			String url = sc.nextLine();
 			System.out.println("Please category of TH");
@@ -378,13 +358,12 @@ public class Driver {
 				System.out.println("New TH created");
 				break;
 			} else {
-				System.out.println("There is something going wrong, press enter to try again, n for exit");
+				System.err.println("There is something going wrong, press enter to try again, type q to exit");
 				String ans = sc.nextLine();
-				if (ans.equals("n")) {
+				if (ans.equalsIgnoreCase("q")) {
 					break;
 				}
 			}
-
 		}
 	}
 
@@ -397,27 +376,28 @@ public class Driver {
 			try {
 				h_id = Integer.parseInt(h_idstr);
 			} catch (Exception e) {
-				System.out.println("Please input valid number");
+				System.err.println("Please input valid number");
 				continue;
 			}
-			System.out.println("Please input the field you want to update here");
+			System.out.println(
+					"Here is field list for you to update: category, address, price, name, telephone, yearBuilt, url, City, State");
+			System.out.println("Please input the field you want to update here(Exactly match the field above");
 			String field = sc.nextLine();
 			System.out.println("Please input the value you want to update here");
 			String value = sc.nextLine();
 			TH th = new TH();
 			boolean check = th.updateTH(login, h_id, field, value, c.stmt);
 			if (check) {
-				System.out.println("TH updated");
+				System.out.println("Your TH infomation has been successfully updated");
 				break;
 			} else {
-				System.out.println("There is something going wrong, press enter to try again, n for exit");
+				System.err.println("Something was going wrong, press enter to try again, q to exit");
 				String ans = sc.nextLine();
-				if (ans.equals("n")) {
+				if (ans.equals("q")) {
 					break;
 				}
 			}
 		}
-		//
 	}
 
 	private static void filter(Connector con) {
@@ -438,40 +418,40 @@ public class Driver {
 				break;
 			}
 			if (field.equalsIgnoreCase("price")) {
-				System.out.println("please input your min");
+				System.out.println("please input the min price you want");
 				String minstr = sc.nextLine();
 				try {
 					min = Integer.parseInt(minstr);
 				} catch (Exception e) {
-					System.out.println("Please input valid number");
+					System.err.println("Please input valid number");
 					continue;
 				}
-				System.out.println("please input your max");
+				System.out.println("please input the max price you want");
 				String maxstr = sc.nextLine();
 				try {
 					max = Integer.parseInt(maxstr);
 				} catch (Exception e) {
-					System.out.println("Please input valid number");
+					System.err.println("Please input valid number");
 					continue;
 				}
 			}
 			String value = "";
-			if (!field.equalsIgnoreCase("price")) {
+			if (!field.equalsIgnoreCase("price")) { /////////////////////////// what
+													/////////////////////////// to
+													/////////////////////////// constraint?????
 				System.out.println("Input the value you want to constraint");
 				value = sc.nextLine();
 			}
-			System.out.println("Sort by price(put p), by rating(put s)," + " by trusted user's rating(put st)");
+			System.out.println("Sort by price(type p), by rating(type s)," + " by trusted user's rating(type st)");
 			String sort = sc.nextLine();
-			System.out.println("Put ASC for ascending order, DESC for descending order");
+			System.out.println("Type ASC for ascending order, or type DESC for descending order");
 			String order = sc.nextLine();
-
 			TH th = new TH();
 			recevier = th.filter(field, min, max, value, sort, order, con.stmt);
 			if (result.isEmpty()) {
 				result = new ArrayList<String>(recevier);
 				continue;
 			}
-
 			for (int j = 0; j < result.size(); j++) {
 				if (!recevier.contains(result.get(j))) {
 					result.remove(result.get(j));
@@ -483,8 +463,6 @@ public class Driver {
 		for (String s : result) {
 			System.out.println(s);
 		}
-
-		//
 	}
 
 	public static void showDegreeSeparation(Connector con) {
@@ -505,7 +483,7 @@ public class Driver {
 				continue;
 			}
 			if (degree.equals("") || degreeNum < 1 || degreeNum > 2) {
-				System.out.println("Please enter number 1 or 2 only");
+				System.err.println("Please enter number 1 or 2 only");
 				continue;
 			} else
 				break;
@@ -514,7 +492,7 @@ public class Driver {
 		while (true) {
 			loginA = sc.nextLine();
 			if (loginA.equals("")) {
-				System.out.println("No empty user name is allowed");
+				System.err.println("No empty user name is allowed");
 				continue;
 			} else
 				break;
@@ -523,7 +501,7 @@ public class Driver {
 		while (true) {
 			loginB = sc.nextLine();
 			if (loginB.equals("")) {
-				System.out.println("No empty user name is allowed");
+				System.err.println("No empty user name is allowed");
 				continue;
 			} else
 				break;
@@ -550,7 +528,6 @@ public class Driver {
 			}
 
 		} else {
-
 			separationUsersList = user.getTwoDegreeSeperation(loginA, loginB, con.stmt);
 			if (separationUsersList.isEmpty()) {
 				System.out.println("Sorry, no 2-degree separation result found");
@@ -561,9 +538,7 @@ public class Driver {
 					System.out.println(s);
 				System.out.println("\n");
 			}
-
 		}
-
 	}
 
 	public static void getGeneralInfo(Connector con) {
@@ -581,19 +556,21 @@ public class Driver {
 			} else {
 				try {
 					limit = Integer.parseInt(amount);
+					if (limit < 0) {
+						System.err.println("Your limit cannot be negative, please try again");
+						continue;
+					} else
+						amount = String.valueOf(limit);
 				} catch (NumberFormatException e) {
 					System.err.println("Please enter a valid limit");
 					continue;
 				}
 				if (amount.length() == 0) {
-					System.out.println("Please enter an non-empty limit");
+					System.err.println("Please enter an non-empty limit");
 					continue;
 				} else
 					break;
 			}
-		}
-		if (limit != -1 && !amount.equals("ALL")) {
-			amount = String.valueOf(limit);
 		}
 		boolean ex = false;
 		while (true) {
@@ -613,7 +590,7 @@ public class Driver {
 					continue;
 				}
 				if (selectionSt.length() == 0 || selection < 1 || selection > 4) {
-					System.out.println("Please enter a valid number to continue");
+					System.err.println("Please enter a valid number to continue");
 					continue;
 				} else
 					break;
@@ -652,7 +629,6 @@ public class Driver {
 				}
 				System.out.println("\n");
 				break;
-
 			case 4:
 				ex = true;
 				break;
@@ -660,7 +636,6 @@ public class Driver {
 				break;
 			}
 		}
-
 	}
 
 	public static void manageFavorite(Connector con) {
@@ -676,7 +651,7 @@ public class Driver {
 				while (true) {
 					answer = sc.nextLine();
 					if (answer.length() == 0 || (!answer.equalsIgnoreCase("Y") && !answer.equalsIgnoreCase("N"))) {
-						System.out.println("Please enter a valid answer");
+						System.err.println("Please enter a valid answer");
 						continue;
 					} else
 						break;
@@ -686,17 +661,16 @@ public class Driver {
 					while (true) {
 						fvTH = sc.nextLine();
 						if (fvTH.length() == 0) {
-							System.out.println("No empty TH name is allowed");
+							System.err.println("No empty TH name is allowed");
 							continue;
 						} else
 							break;
 					}
-
 					if (fv.addFavorite(login, fvTH, con.stmt)) {
 						System.out.println("Your favorite TH has been recorded");
 						break;
 					} else {
-						System.out.println("Failed to record your favorite, please try again");
+						System.err.println("Failed to record your favorite, please try again");
 						continue;
 					}
 				} else {
@@ -724,7 +698,7 @@ public class Driver {
 						continue;
 					}
 					if (selection.length() == 0 || sel > 2 || sel < 1) {
-						System.out.println("Please enter a valid selection");
+						System.err.println("Please enter a valid selection");
 						continue;
 					} else
 						break;
@@ -735,17 +709,16 @@ public class Driver {
 					while (true) {
 						changeName = sc.nextLine();
 						if (changeName.length() == 0) {
-							System.out.println("No empty TH name is allowed");
+							System.err.println("No empty TH name is allowed");
 							continue;
 						} else
 							break;
 					}
-
 					if (fv.addFavorite(login, changeName, con.stmt)) {
 						System.out.println("Your favorite TH has been recorded");
 						break;
 					} else {
-						System.out.println("Failed to record your favorite, please try again");
+						System.err.println("Failed to record your favorite, please try again");
 						continue;
 					}
 					// break;
@@ -754,7 +727,7 @@ public class Driver {
 					while (true) {
 						hid = sc.nextLine();
 						if (hid.length() == 0) {
-							System.out.println("No empty TH name is allowed");
+							System.err.println("No empty TH name is allowed");
 							continue;
 						} else
 							break;
@@ -763,17 +736,15 @@ public class Driver {
 						System.out.println("Your favorite TH has been deleted");
 
 					} else {
-						System.out.println("Failed to record your favorite, please try again");
+						System.err.println("Failed to record your favorite, please try again");
 						continue;
 					}
 					break;
 				default:
 					break;
 				}
-
 			}
 		}
-
 	}
 
 	// public static ArrayList<String[]> getpmost(String most, Connector c) {
@@ -818,28 +789,26 @@ public class Driver {
 			try {
 				h_id = Integer.parseInt(h_idstr);
 			} catch (Exception e) {
-				System.out.println("Please input valid number");
+				System.err.println("Please input valid number");
 				continue;
 			}
-			System.out.println("Please input date you want to check in MM-dd-yyyy format"); ///////////
+			System.out.println("Please input date you want to check in MM-dd-yyyy format");
 			DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
 			String fromstr = sc.nextLine();
-
 			try {
 				from = df.parse(fromstr);
 				sqlfrom = new java.sql.Date(from.getTime());
 			} catch (Exception e) {
-				System.out.println("Please input valid date format");
+				System.err.println("Please input valid date format");
 				continue;
 			}
 			System.out.println("Please input date you want to check out MM-dd-yyyy format");
 			String tostr = sc.nextLine();
-
 			try {
 				to = df.parse(tostr);
 				sqlto = new java.sql.Date(to.getTime());
 			} catch (Exception e) {
-				System.out.println("Please input valid date format");
+				System.err.println("Please input valid date format");
 				continue;
 			}
 			System.out.println("Are you confirm to reserve? y for yes, n for no");
@@ -850,8 +819,7 @@ public class Driver {
 			Period p = new Period();
 			int p_id = p.getP_id(sqlfrom, sqlto, c.stmt);
 			Available a = new Available();
-
-			ArrayList<String> arr = a.getAvilable(h_id, 50, c.stmt);
+			ArrayList<String> arr = a.getAvilable(h_id, p_id, c.stmt); //////////////// here!!!!!!!!!!!!!
 			if (arr.size() == 0) {
 				System.out.println("Time is not available");
 				continue;
@@ -860,13 +828,11 @@ public class Driver {
 			double price_per_night = Double.parseDouble(price_per_nightstr);
 			long diff = to.getTime() - from.getTime();
 			int days = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-			if (days == 0) {
+			if (days == 0)
 				days = 1;
-			}
 			Reserve r = new Reserve();
 			Date now = new Date();
 			java.sql.Date sqlnow = new java.sql.Date(now.getTime());
-
 			boolean check = r.addReserve(login, h_id, (int) (days * price_per_night), sqlfrom, sqlto, sqlnow, c.stmt);
 			if (check) {
 				System.out.println("Congratulations you have successfully reserve a TH");
@@ -890,12 +856,11 @@ public class Driver {
 				}
 
 			} else {
-				System.out.println("oooops, seems something going wrong, please check your input");
+				System.err.println("Oooops, something was going wrong, please check your input");
 				continue;
 			}
 			break;
 		}
-
 	}
 
 	private static void giveFeedback(Connector c) {
@@ -909,9 +874,8 @@ public class Driver {
 			int h_id = 0;
 			try {
 				h_id = Integer.parseInt(h_idstr);
-
 			} catch (Exception e) {
-				System.out.println("Please input valid number");
+				System.err.println("Please input valid number");
 				continue;
 			}
 			System.out.println("Please input your text feedback (100 words max)");
@@ -922,11 +886,11 @@ public class Driver {
 			try {
 				score = Integer.parseInt(scorestr);
 				if (score > 10 || score < 0) {
-					System.out.println("Please input valid number");
+					System.err.println("Please input valid number");
 					continue;
 				}
 			} catch (Exception e) {
-				System.out.println("Please input valid number");
+				System.err.println("Please input valid number");
 				continue;
 			}
 			Feedback f = new Feedback();
@@ -936,11 +900,10 @@ public class Driver {
 				System.out.println("You successfully gave feedback");
 				break;
 			} else {
-				System.out.println("oooops, seems something going wrong, please check your input");
+				System.err.println("Oooops, something was going wrong, please check your input");
 				continue;
 			}
 		}
-
 	}
 
 	private static void rateFeedback(Connector c) {
@@ -955,17 +918,16 @@ public class Driver {
 			try {
 				f_id = Integer.parseInt(f_idstr);
 			} catch (Exception e) {
-				System.out.println("Please input valid number");
+				System.err.println("Please input valid number");
 				continue;
 			}
-
 			System.out.println("Please input your rating score, press q to quit");
 			String ratingstr = sc.nextLine();
 			int rating = -1;
 			try {
 				rating = Integer.parseInt(ratingstr);
 			} catch (Exception e) {
-				System.out.println("Please input valid number");
+				System.err.println("Please input valid number");
 				continue;
 			}
 			Feedback f = new Feedback();
@@ -974,11 +936,10 @@ public class Driver {
 				System.out.println("You successfully gave rating");
 				break;
 			} else {
-				System.out.println("oooops, seems something going wrong, please check your input");
+				System.err.println("Oooops, something was going wrong, please check your input");
 				continue;
 			}
 		}
-
 	}
 
 	private static ArrayList<String> getTHfeedback(Connector c) {
@@ -994,7 +955,7 @@ public class Driver {
 			try {
 				h_id = Integer.parseInt(h_idstr);
 			} catch (Exception e) {
-				System.out.println("Please input valid number");
+				System.err.println("Please input valid number");
 				continue;
 			}
 			System.out.println("Please input amount you want to limit, ALL for all feedbacks");
@@ -1003,21 +964,18 @@ public class Driver {
 				try {
 					Integer.parseInt(amount);
 				} catch (Exception e) {
-					System.out.println("Please input valid number");
+					System.err.println("Please input valid number");
 					continue;
 				}
 			}
-
 			Feedback f = new Feedback();
 			result = f.getTHFeedback(h_id, amount, c.stmt);
 			break;
-
 		}
-
 		return result;
 	}
 
-	private static ArrayList<String> getuserful(Connector c) {
+	private static ArrayList<String> getuserful(Connector c) { //////Unused!!!!!!!!
 		ArrayList<String> result = new ArrayList<String>();
 		Scanner sc = new Scanner(System.in);
 		while (true) {
@@ -1030,7 +988,7 @@ public class Driver {
 			try {
 				h_id = Integer.parseInt(h_idstr);
 			} catch (Exception e) {
-				System.out.println("Please input valid number");
+				System.err.println("Please input valid number");
 				continue;
 			}
 			System.out.println("Please input amount you want to limit, ALL for all feedbacks, press q to quit");
@@ -1041,7 +999,7 @@ public class Driver {
 				try {
 					Integer.parseInt(amount);
 				} catch (Exception e) {
-					System.out.println("Please input valid number");
+					System.err.println("Please input valid number");
 					continue;
 				}
 				Feedback f = new Feedback();
@@ -1062,7 +1020,7 @@ public class Driver {
 				break;
 			}
 			if (login.equals(login2)) {
-				System.out.println("You can't trust yourself..");
+				System.err.println("You can't trust yourself..");
 				continue;
 			}
 			System.out.println("Do you trust him/her? y for yes, n for no");
@@ -1073,15 +1031,14 @@ public class Driver {
 			} else if (boo.equalsIgnoreCase("n")) {
 				f = false;
 			} else {
-				System.out.println("please input something valid..");
+				System.err.println("please input something valid..");
 				continue;
 			}
 			Users u = new Users();
 			u.trustRecording(login, login2, f, c.stmt);
-			System.out.println("Success");
+			System.out.println("Success!");
 			break;
 		}
-
 	}
 
 	private static void visit(Connector c) {
@@ -1101,7 +1058,7 @@ public class Driver {
 			try {
 				from = df.parse(fromstr);
 			} catch (Exception e) {
-				System.out.println("Please input valid date format");
+				System.err.println("Please input valid date format");
 				continue;
 			}
 			System.out.println("Please input date you checked out in MM-dd-yyyy format");
@@ -1110,7 +1067,7 @@ public class Driver {
 			try {
 				to = df.parse(tostr);
 			} catch (Exception e) {
-				System.out.println("Please input valid date format");
+				System.err.println("Please input valid date format");
 				continue;
 			}
 			System.out.println("Please r_id that you visited");
@@ -1122,8 +1079,7 @@ public class Driver {
 				System.out.println("Please input valid number");
 				continue;
 			}
-
-			System.out.println("Are you confirm to add visit? y for yes, n for no");
+			System.out.println("Confirm to add visit? please type y for yes, n for no");
 			String confirm = sc.nextLine();
 			if (confirm.equalsIgnoreCase("n")) {
 				continue;
@@ -1133,14 +1089,13 @@ public class Driver {
 			Visit v = new Visit();
 			boolean check = v.addVisit(sqlfrom, sqlto, r_id, c.stmt);
 			if (check) {
-				System.out.println("You successfully add visit");
+				System.out.println("You have successfully added visit");
 				break;
 			} else {
-				System.out.println("oooops, seems something going wrong, please check your input");
+				System.err.println("Oooops, something was going wrong, please check your input");
 				continue;
 			}
 		}
-
 	}
 
 	private static void addPeriod(Connector c) {
@@ -1157,26 +1112,24 @@ public class Driver {
 			try {
 				h_id = Integer.parseInt(h_idstr);
 			} catch (Exception e) {
-				System.out.println("Please input valid number");
+				System.err.println("Please input valid number");
 				continue;
 			}
-			System.out.println("Please input date that you available from in MM-dd-yyyy format");
+			System.out.println("Please input the start date that your TH will be available in MM-dd-yyyy format");
 			String fromstr = sc.nextLine();
 			DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
-		
 			try {
 				from = df.parse(fromstr);
 			} catch (Exception e) {
-				System.out.println("Please input valid date format");
+				System.err.println("Please input valid date format");
 				continue;
 			}
-			System.out.println("Please input date you available to in Mm-dd-yyyy format");
+			System.out.println("Please input the end date that your TH will be available in MM-dd-yyyy format");
 			String tostr = sc.nextLine();
-			
 			try {
 				to = df.parse(tostr);
 			} catch (Exception e) {
-				System.out.println("Please input valid date format");
+				System.err.println("Please input valid date format");
 				continue;
 			}
 			Period p = new Period();
@@ -1187,13 +1140,12 @@ public class Driver {
 			Available a = new Available();
 			TH th = new TH();
 			String price = th.filter("h_id", 0, 0, h_id + "", "p", "DESC", c.stmt).get(0).split("\t")[5];
-		
-			boolean check = a.addAvilable(login,h_id, pid, Double.parseDouble(price), c.stmt);
+			boolean check = a.addAvilable(login, h_id, pid, Double.parseDouble(price), c.stmt);
 			if (check) {
 				System.out.println("You successfully add Period");
 				break;
 			} else {
-				System.out.println("oooops, seems something going wrong, please check your input");
+				System.err.println("oooops, seems something going wrong, please check your input");
 				continue;
 			}
 		}
@@ -1222,7 +1174,7 @@ public class Driver {
 				try {
 					Integer.parseInt(amount);
 				} catch (Exception e) {
-					System.out.println("Please input valid number");
+					System.err.println("Please input valid number");
 					continue;
 				}
 			}
@@ -1235,7 +1187,6 @@ public class Driver {
 			result = u.getTrustedUsers(c.stmt, amount);
 			break;
 		}
-
 		for (String[] s : result) {
 			System.out.println("Username: " + s[0] + " login: " + s[1] + " total trust: " + s[2]);
 		}
@@ -1251,7 +1202,7 @@ public class Driver {
 				try {
 					Integer.parseInt(amount);
 				} catch (Exception e) {
-					System.out.println("Please input valid number");
+					System.err.println("Please input valid number");
 					continue;
 				}
 			}
@@ -1264,7 +1215,6 @@ public class Driver {
 			result = f.gettopUserful(amount, c.stmt);
 			break;
 		}
-
 		for (String s : result) {
 			System.out.println(s);
 		}

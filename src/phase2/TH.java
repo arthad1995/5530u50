@@ -21,17 +21,15 @@ public class TH {
 				return false;
 			}
 		} catch (Exception e) {
-
 			System.err.println(e.getMessage());
-
 		}
 		return false;
 	}
 
 	/** good check */
 	public boolean updateTH(String login, int h_id, String updateField, String updateValue, Statement stmt) {
-		if(!checkupdate(h_id, login, stmt)){
-			System.out.println("You can't modify other people's TH");
+		if (!checkupdate(h_id, login, stmt)) {
+			System.err.println("You can't modify other people's TH");
 		}
 		String sql = "UPDATE TH " + "set " + updateField + " = '" + updateValue + "'" + " where h_id= " + h_id + ";";
 
@@ -49,14 +47,15 @@ public class TH {
 		}
 		return false;
 	}
-	public boolean checkupdate(int h_id, String login, Statement stmt){
+
+	public boolean checkupdate(int h_id, String login, Statement stmt) {
 		boolean check = false;
 		String sql = "select * from TH " + "where login ='" + login + "'" + " h_id " + h_id;
 		ResultSet rs = null;
 		try {
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-			check = true;		
+				check = true;
 			}
 			rs.close();
 		} catch (Exception e) {
@@ -64,6 +63,7 @@ public class TH {
 		}
 		return check;
 	}
+
 	// leave
 	public ArrayList<Integer> geth_id(String name, Statement stmt) {
 
@@ -99,12 +99,10 @@ public class TH {
 			while (rs.next()) {
 				categories.add(rs.getString("category"));
 			}
-		} catch (SQLException e) {
-
+			rs.close();
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
-
 		return categories;
 	}
 
@@ -126,6 +124,7 @@ public class TH {
 				}
 			} catch (Exception e) {
 
+				System.err.println(e.getMessage());
 			}
 
 			for (String s : catagoryList) {
@@ -144,8 +143,9 @@ public class TH {
 						forReturn.add(arr);
 					}
 					rs.close();
-				} catch (SQLException e) {
+				} catch (Exception e) {
 
+					System.err.println(e.getMessage());
 				}
 			}
 
@@ -159,6 +159,7 @@ public class TH {
 				}
 			} catch (Exception e) {
 
+				System.err.println(e.getMessage());
 			}
 
 			for (String s : catagoryList) {
@@ -178,7 +179,8 @@ public class TH {
 						forReturn.add(arr);
 					}
 					rs.close();
-				} catch (SQLException e) {
+				} catch (Exception e) {
+					System.err.println(e.getMessage());
 
 				}
 			}
@@ -205,7 +207,7 @@ public class TH {
 		// result.add(arr);
 		// }
 		// rs.close();
-		// } catch (SQLException e) {
+		// } catch (Exception e) {
 		//
 		// }
 		//
@@ -225,6 +227,7 @@ public class TH {
 				}
 			} catch (Exception e) {
 
+				System.err.println(e.getMessage());
 			}
 
 			for (String s : catagoryList) {
@@ -242,8 +245,9 @@ public class TH {
 						forReturn.add(arr);
 					}
 					rs.close();
-				} catch (SQLException e) {
+				} catch (Exception e) {
 
+					System.err.println(e.getMessage());
 				}
 			}
 
@@ -256,6 +260,7 @@ public class TH {
 					catagoryList.add(rs.getString("category"));
 				}
 			} catch (Exception e) {
+				System.err.println(e.getMessage());
 
 			}
 			for (String s : catagoryList) {
@@ -273,7 +278,8 @@ public class TH {
 						forReturn.add(arr);
 					}
 					rs.close();
-				} catch (SQLException e) {
+				} catch (Exception e) {
+					System.err.println(e.getMessage());
 
 				}
 			}
@@ -297,7 +303,8 @@ public class TH {
 			}
 			rs.close();
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
 
 		}
 		ArrayList<String[]> popularList = new ArrayList<String[]>();
@@ -317,7 +324,6 @@ public class TH {
 					getSort.add(Integer.parseInt((tempList.get(j)[3])));
 				}
 			}
-
 		}
 		Collections.sort(getSort, Collections.reverseOrder());
 		ArrayList<String[]> popularLists = new ArrayList<String[]>();
@@ -354,14 +360,14 @@ public class TH {
 					categoryList.add(rs.getString("category"));
 				}
 				rs.close();
-			} catch (SQLException e) {
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
 			}
 
 			for (String s : categoryList) {
 				sql = "select t.name, t.category, AVG(r.cost) AS AverageCost from "
 						+ "TH t, Reserve r, Visit v where t.h_id = r.h_id and r.r_id = v.r_id and t.category = '" + s
 						+ "' group by t.name, t.category order by t.category, AverageCost desc;";
-
 				rs = null;
 				try {
 					rs = st.executeQuery(sql);
@@ -373,7 +379,8 @@ public class TH {
 						forReturn.add(arr);
 					}
 					// rs.close();
-				} catch (SQLException e) {
+				} catch (Exception e) {
+					System.err.println(e.getMessage());
 
 				} finally {
 					try {
@@ -381,11 +388,10 @@ public class TH {
 							rs.close();
 						}
 					} catch (Exception e) {
-
+						System.err.println(e.getMessage());
 					}
 				}
 			}
-
 		} else {
 			int limit = Integer.parseInt(amount);
 			sql = "select category from TH group by category;";
@@ -395,7 +401,8 @@ public class TH {
 					categoryList.add(rs.getString("category"));
 				}
 				rs.close();
-			} catch (SQLException e) {
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
 			}
 
 			for (String s : categoryList) {
@@ -414,7 +421,8 @@ public class TH {
 						forReturn.add(arr);
 					}
 					// rs.close();
-				} catch (SQLException e) {
+				} catch (Exception e) {
+					System.err.println(e.getMessage());
 
 				} finally {
 					try {
@@ -422,13 +430,12 @@ public class TH {
 							rs.close();
 						}
 					} catch (Exception e) {
-
+						System.err.println(e.getMessage());
 					}
 				}
 			}
 		}
 		return forReturn;
-
 	}
 
 	public ArrayList<String> filter(String field, int min, int max, String value, String sort, String increase,
@@ -439,14 +446,13 @@ public class TH {
 		if (field.equalsIgnoreCase("Price")) {
 			ResultSet rs = null;
 			String sql = "select * from TH" + " where Price< " + max + " and price> " + min;
-			
 
 			try {
 				rs = stmt.executeQuery(sql);
 				while (rs.next()) {
-					beforeSort.add(rs.getString("h_id") + "\t"  + "\t" + rs.getString("category")
-							+ "\t" + rs.getString("address") + "\t" + rs.getString("city") + "\t"
-							+ rs.getString("state") + "\t" + rs.getString("price") + "\t" + rs.getString("name") + "\t"
+					beforeSort.add(rs.getString("h_id") + "\t" + "\t" + rs.getString("category") + "\t"
+							+ rs.getString("address") + "\t" + rs.getString("city") + "\t" + rs.getString("state")
+							+ "\t" + rs.getString("price") + "\t" + rs.getString("name") + "\t"
 							+ rs.getString("telephone") + "\t" + rs.getString("keyword") + "\t"
 							+ rs.getString("yearBuilt") + "\t" + rs.getString("url") + "\t");
 				}
@@ -454,181 +460,168 @@ public class TH {
 
 			catch (Exception e) {
 				System.err.println(e.getMessage());
-			}					
+			}
 			if (sort.equalsIgnoreCase("p")) {
-				sql = sql + " order by " + "Price " + increase + ";";								
-			try {
-				rs = stmt.executeQuery(sql);
-				while (rs.next()) {
-					result.add(rs.getString("h_id") + "\t" + "\t" + rs.getString("category")
-							+ "\t" + rs.getString("address") + "\t" + rs.getString("city") + "\t"
-							+ rs.getString("state") + "\t" + rs.getString("price") + "\t" + rs.getString("name") + "\t"
-							+ rs.getString("telephone") + "\t" + rs.getString("keyword") + "\t"
-							+ rs.getString("yearBuilt") + "\t" + rs.getString("url") + "\t");
-				}
-			}
-			catch (Exception e) {
-				System.err.println(e.getMessage());
-			}
-			
-			}
-			
-		  if (sort.equalsIgnoreCase("s")) {
-				ArrayList<String> sortedTh = avgScore(increase,stmt);
-				
-				for(int i = 0; i<sortedTh.size();i++){
-					for(int j = 0; j <beforeSort.size(); j++){
-						if(sortedTh.get(i).split("\t")[0].equals(beforeSort.get(j).split("\t")[0])){
-							result.add(beforeSort.get(j) + "\tAverage score"+sortedTh.get(i).split("\t")[1]);
-						}
-					}
-				}	  
-			} 
-		  
-		  
-		  else if (sort.equalsIgnoreCase("st")) {
-				Users u = new Users();
-				ArrayList<String[]> trustList= u.getTrustedUsers(stmt, "all");
-				ArrayList<String> sotedList = new ArrayList<String>();
-				String trusted = "";
-				for(String[] arr:trustList){
-					String login =arr[1];
-					trusted = trusted +" f.login = '" + login+"' or ";
-				}
-				trusted=	trusted.substring(0, trusted.length()-3);
-				sql = "select f.h_id, avg (f.score) as average from TH t, Feedback f "+
-						"where t.h_id=f.h_id and (" + trusted +") "+
-						"group by f.h_id order by avg(f.score) " + increase;
-			//System.out.println(sql);
+				sql = sql + " order by " + "Price " + increase + ";";
 				try {
 					rs = stmt.executeQuery(sql);
 					while (rs.next()) {
-						sotedList.add(rs.getString("h_id") +"\t"+ rs.getString("average"));
+						result.add(rs.getString("h_id") + "\t" + "\t" + rs.getString("category") + "\t"
+								+ rs.getString("address") + "\t" + rs.getString("city") + "\t" + rs.getString("state")
+								+ "\t" + rs.getString("price") + "\t" + rs.getString("name") + "\t"
+								+ rs.getString("telephone") + "\t" + rs.getString("keyword") + "\t"
+								+ rs.getString("yearBuilt") + "\t" + rs.getString("url") + "\t");
+					}
+				} catch (Exception e) {
+					System.err.println(e.getMessage());
+				}
+
+			}
+
+			if (sort.equalsIgnoreCase("s")) {
+				ArrayList<String> sortedTh = avgScore(increase, stmt);
+
+				for (int i = 0; i < sortedTh.size(); i++) {
+					for (int j = 0; j < beforeSort.size(); j++) {
+						if (sortedTh.get(i).split("\t")[0].equals(beforeSort.get(j).split("\t")[0])) {
+							result.add(beforeSort.get(j) + "\tAverage score" + sortedTh.get(i).split("\t")[1]);
+						}
+					}
+				}
+			}
+
+			else if (sort.equalsIgnoreCase("st")) {
+				Users u = new Users();
+				ArrayList<String[]> trustList = u.getTrustedUsers(stmt, "all");
+				ArrayList<String> sotedList = new ArrayList<String>();
+				String trusted = "";
+				for (String[] arr : trustList) {
+					String login = arr[1];
+					trusted = trusted + " f.login = '" + login + "' or ";
+				}
+				trusted = trusted.substring(0, trusted.length() - 3);
+				sql = "select f.h_id, avg (f.score) as average from TH t, Feedback f " + "where t.h_id=f.h_id and ("
+						+ trusted + ") " + "group by f.h_id order by avg(f.score) " + increase;
+				// System.out.println(sql);
+				try {
+					rs = stmt.executeQuery(sql);
+					while (rs.next()) {
+						sotedList.add(rs.getString("h_id") + "\t" + rs.getString("average"));
 					}
 				}
 
 				catch (Exception e) {
 					System.err.println(e.getMessage());
 				}
-				for(int i = 0 ; i < sotedList.size() ; i++){
-					for(int j = 0 ; j<beforeSort.size();j++){
-						if(sotedList.get(i).split("\t")[0].equals(beforeSort.get(j).split("\t")[0])){
-							result.add(beforeSort.get(j) + "\tAverage score"+sotedList.get(i).split("\t")[1]);
+				for (int i = 0; i < sotedList.size(); i++) {
+					for (int j = 0; j < beforeSort.size(); j++) {
+						if (sotedList.get(i).split("\t")[0].equals(beforeSort.get(j).split("\t")[0])) {
+							result.add(beforeSort.get(j) + "\tAverage score" + sotedList.get(i).split("\t")[1]);
 						}
 					}
 				}
 			}
-			
+
 			return result;
 		} else {
 			ResultSet rs = null;
-			
-			String sql = "select * from TH" + " where " + field + " like '%" + value+"%'";
+
+			String sql = "select * from TH" + " where " + field + " like '%" + value + "%'";
 			try {
 				rs = stmt.executeQuery(sql);
 				while (rs.next()) {
-					beforeSort.add(rs.getString("h_id") + "\t"  + "\t" + rs.getString("category")
-							+ "\t" + rs.getString("address") + "\t" + rs.getString("city") + "\t"
-							+ rs.getString("state") + "\t" + rs.getString("price") + "\t" + rs.getString("name") + "\t"
+					beforeSort.add(rs.getString("h_id") + "\t" + "\t" + rs.getString("category") + "\t"
+							+ rs.getString("address") + "\t" + rs.getString("city") + "\t" + rs.getString("state")
+							+ "\t" + rs.getString("price") + "\t" + rs.getString("name") + "\t"
 							+ rs.getString("telephone") + "\t" + rs.getString("keyword") + "\t"
 							+ rs.getString("yearBuilt") + "\t" + rs.getString("url") + "\t");
 				}
 			}
-			
+
 			catch (Exception e) {
 				System.err.println(e.getMessage());
 			}
-			
-			
+
 			if (sort.equalsIgnoreCase("p")) {
 				sql = sql + " order by " + "Price " + increase + ";";
-			
-			
-			
-			try {
-				rs = stmt.executeQuery(sql);
-				while (rs.next()) {
-					result.add(rs.getString("h_id")  + "\t" + rs.getString("category")
-							+ "\t" + rs.getString("address") + "\t" + rs.getString("city") + "\t"
-							+ rs.getString("state") + "\t" + rs.getString("price") + "\t" + rs.getString("name") + "\t"
-							+ rs.getString("telephone") + "\t" + rs.getString("keyword") + "\t"
-							+ rs.getString("yearBuilt") + "\t" + rs.getString("url") + "\t");
-				}
-			}
-			catch (Exception e) {
-				System.err.println(e.getMessage());
-			}	
-			}
-		  if (sort.equalsIgnoreCase("s")) {
-				ArrayList<String> sortedTh = avgScore(increase,stmt);
-				
-				for(int i = 0; i<sortedTh.size();i++){
-					for(int j = 0; j <beforeSort.size(); j++){
-						if(sortedTh.get(i).split("\t")[0].equals(beforeSort.get(j).split("\t")[0])){
-							result.add(beforeSort.get(j) + "\tAverage score"+sortedTh.get(i).split("\t")[j]);
-						}
-					}
-				}	  
-			} 
-		  
-		  
-		  else if (sort.equalsIgnoreCase("st")) {
-				Users u = new Users();
-				ArrayList<String[]> trustList= u.getTrustedUsers(stmt, "all");
-				ArrayList<String> sotedList = new ArrayList<String>();
-				String trusted = "";
-				for(String[] arr:trustList){
-					String login =arr[1];
-					trusted = trusted +" f.login = '" + login+"' or ";
-				}
-				trusted=	trusted.substring(0, trusted.length()-3);
-				sql = "select f.h_id, avg (f.score) as average from TH t, Feedback f "+
-						"where t.h_id=f.h_id and (" + trusted +") "+
-						"group by f.h_id order by avg(f.score) " + increase;
+
 				try {
 					rs = stmt.executeQuery(sql);
 					while (rs.next()) {
-						sotedList.add(rs.getString("h_id") +"\t"+ rs.getString("average"));
+						result.add(rs.getString("h_id") + "\t" + rs.getString("category") + "\t"
+								+ rs.getString("address") + "\t" + rs.getString("city") + "\t" + rs.getString("state")
+								+ "\t" + rs.getString("price") + "\t" + rs.getString("name") + "\t"
+								+ rs.getString("telephone") + "\t" + rs.getString("keyword") + "\t"
+								+ rs.getString("yearBuilt") + "\t" + rs.getString("url") + "\t");
 					}
+				} catch (Exception e) {
+					System.err.println(e.getMessage());
+				}
+			}
+			if (sort.equalsIgnoreCase("s")) {
+				ArrayList<String> sortedTh = avgScore(increase, stmt);
+
+				for (int i = 0; i < sortedTh.size(); i++) {
+					for (int j = 0; j < beforeSort.size(); j++) {
+						if (sortedTh.get(i).split("\t")[0].equals(beforeSort.get(j).split("\t")[0])) {
+							result.add(beforeSort.get(j) + "\tAverage score" + sortedTh.get(i).split("\t")[j]);
+						}
+					}
+				}
+			}
+
+			else if (sort.equalsIgnoreCase("st")) {
+				Users u = new Users();
+				ArrayList<String[]> trustList = u.getTrustedUsers(stmt, "all");
+				ArrayList<String> sotedList = new ArrayList<String>();
+				String trusted = "";
+				for (String[] arr : trustList) {
+					String login = arr[1];
+					trusted = trusted + " f.login = '" + login + "' or ";
+				}
+				trusted = trusted.substring(0, trusted.length() - 3);
+				sql = "select f.h_id, avg (f.score) as average from TH t, Feedback f " + "where t.h_id=f.h_id and ("
+						+ trusted + ") " + "group by f.h_id order by avg(f.score) " + increase;
+				try {
+					rs = stmt.executeQuery(sql);
+					while (rs.next()) {
+						sotedList.add(rs.getString("h_id") + "\t" + rs.getString("average"));
+					}
+					rs.close();
 				}
 
 				catch (Exception e) {
 					System.err.println(e.getMessage());
 				}
-				for(int i = 0 ; i < sotedList.size() ; i++){
-					for(int j = 0 ; j<beforeSort.size();j++){
-						if(sotedList.get(i).split("\t")[0].equals(beforeSort.get(j).split("\t")[0])){
-							result.add(beforeSort.get(j) + "\tAverage score"+sotedList.get(i).split("\t")[1]);
+				for (int i = 0; i < sotedList.size(); i++) {
+					for (int j = 0; j < beforeSort.size(); j++) {
+						if (sotedList.get(i).split("\t")[0].equals(beforeSort.get(j).split("\t")[0])) {
+							result.add(beforeSort.get(j) + "\tAverage score" + sotedList.get(i).split("\t")[1]);
 						}
 					}
 				}
 			}
-			
+
 			return result;
 		}
 	}
 
-	private ArrayList<String> avgScore(String order, Statement stmt){
+	private ArrayList<String> avgScore(String order, Statement stmt) {
 		ArrayList<String> result = new ArrayList<String>();
-		
-			String sql =  "select f.h_id, avg (f.score) as average from TH t, Feedback f "+
-					"where t.h_id=f.h_id "+
-					"group by f.h_id "+
-					"order by avg(f.score) " + order;
-			ResultSet rs = null;
-			try {
-				rs = stmt.executeQuery(sql);
-				System.out.println(sql);
-				while (rs.next()) {
-					result.add(rs.getString("h_id") +"\t"+ rs.getString("average"));
-				}
-			}
-			catch (Exception e) {
-				System.err.println(e.getMessage());
 
+		String sql = "select f.h_id, avg (f.score) as average from TH t, Feedback f " + "where t.h_id=f.h_id "
+				+ "group by f.h_id " + "order by avg(f.score) " + order;
+		ResultSet rs = null;
+		try {
+			rs = stmt.executeQuery(sql);
+			// System.out.println(sql);
+			while (rs.next()) {
+				result.add(rs.getString("h_id") + "\t" + rs.getString("average"));
 			}
-		
-
+			rs.close();
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
 		return result;
 	}
 }

@@ -19,7 +19,6 @@ public class Visit {
 		//need check
 		String sql = "insert into Visit (Visit.from, Visit.to, Visit.r_id) " + "VALUES ('" + from + "', '" + to + "', '"
 				+ r_id + "');";
-
 		System.out.println(sql);
 		int success = 0;
 		// System.out.println("executing "+ sql);
