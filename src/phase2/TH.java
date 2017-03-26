@@ -117,7 +117,7 @@ public class TH {
 		int limit;
 		String sql;
 
-		if (amount.equals("ALL")) {
+		if (amount.equalsIgnoreCase("ALL")) {
 			sql = "select category from TH group by category";
 			try {
 				rs = st.executeQuery(sql);
@@ -216,7 +216,7 @@ public class TH {
 		ResultSet rs = null;
 		int limit;
 		String sql;
-		if (amount.equals("ALL")) {
+		if (amount.equalsIgnoreCase("ALL")) {
 			sql = "select category from TH group by category";
 			try {
 				rs = st.executeQuery(sql);
@@ -346,7 +346,7 @@ public class TH {
 		String[] arr;
 		ResultSet rs = null;
 		String sql = "";
-		if (amount.equals("ALL")) {
+		if (amount.equalsIgnoreCase("ALL")) {
 			sql = "select category from TH group by category;";
 			try {
 				rs = st.executeQuery(sql);
@@ -444,7 +444,7 @@ public class TH {
 			try {
 				rs = stmt.executeQuery(sql);
 				while (rs.next()) {
-					beforeSort.add(rs.getString("h_id") + "\t" + rs.getString("login") + "\t" + rs.getString("category")
+					beforeSort.add(rs.getString("h_id") + "\t"  + "\t" + rs.getString("category")
 							+ "\t" + rs.getString("address") + "\t" + rs.getString("city") + "\t"
 							+ rs.getString("state") + "\t" + rs.getString("price") + "\t" + rs.getString("name") + "\t"
 							+ rs.getString("telephone") + "\t" + rs.getString("keyword") + "\t"
@@ -548,7 +548,7 @@ public class TH {
 			try {
 				rs = stmt.executeQuery(sql);
 				while (rs.next()) {
-					result.add(rs.getString("h_id") + "\t" + rs.getString("login") + "\t" + rs.getString("category")
+					result.add(rs.getString("h_id")  + "\t" + rs.getString("category")
 							+ "\t" + rs.getString("address") + "\t" + rs.getString("city") + "\t"
 							+ rs.getString("state") + "\t" + rs.getString("price") + "\t" + rs.getString("name") + "\t"
 							+ rs.getString("telephone") + "\t" + rs.getString("keyword") + "\t"

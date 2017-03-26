@@ -10,14 +10,13 @@ public class Visit {
 	// check good
 	public boolean addVisit(Date from, Date to, int r_id, Statement stmt) {
 		Reserve r = new Reserve();
-		// new connection????
 		ArrayList<Date[]> arr = r.getReserveDate(r_id, "", stmt);
 		for (Date[] a : arr) {
 			if (a[0].before(from) || a[1].after(to)) {
 				return false;
 			}
 		}
-
+		//need check
 		String sql = "insert into Visit (Visit.from, Visit.to, Visit.r_id) " + "VALUES ('" + from + "', '" + to + "', '"
 				+ r_id + "');";
 

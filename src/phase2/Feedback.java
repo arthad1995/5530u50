@@ -37,7 +37,7 @@ public class Feedback {
 	private boolean checkGive(int h_id, String login, Statement stmt) {
 		String sql = "select * from Feedback where h_id = " + h_id + " and login= '" + login + "';";
 		ResultSet rs = null;
-		System.out.println(sql);
+		//System.out.println(sql);
 		try {
 			rs = stmt.executeQuery(sql);
 
@@ -63,9 +63,9 @@ public class Feedback {
 			usefuleList.add(ss.split("\t")[0]);
 		}
 		// Rating query
-		if (amount.equals("all")) {
+		if (amount.equalsIgnoreCase("all")) {
 			String sql = "select * from Feedback f " + " where f.h_id= " + h_id + ";";
-
+			//System.out.println("sql is " +sql);
 			ResultSet rs = null;
 			try {
 				rs = stmt.executeQuery(sql);
@@ -155,7 +155,7 @@ public class Feedback {
 		}
 		String sql = "insert into Rate (login, f_id, rating) " + "VALUES ('" + login + "', " + f_id + ", " + rating
 				+ ");";
-		System.out.println(sql);
+		//System.out.println(sql);
 		int rs = 0;
 		try {
 			rs = stmt.executeUpdate(sql);
@@ -242,7 +242,7 @@ public class Feedback {
 	// good check
 	public ArrayList<String> gettopUserful(String amount, Statement stmt) {
 		ArrayList<String> result = new ArrayList<String>();
-		if (amount.equals("all")) {
+		if (amount.equalsIgnoreCase("all")) {
 			String sql = "select login, avg(rating) as average from Rate" + " group by (login)"
 					+ " order by average desc" + ";";
 

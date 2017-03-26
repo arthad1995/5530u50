@@ -136,7 +136,7 @@ public class Driver {
 			System.out.println("Please enter number 4 add visit recoding");
 			System.out.println("Please enter number 5 trust or not trust other users");
 			System.out.println("Please enter number 6 set useful or useless to other feedbacks");
-			System.out.println("Please enter number 7 to request general information");
+			System.out.println("Please enter number 7 to request general information (Statistics)");
 			System.out.println("Please enter number 8 to view visit history");
 			System.out.println("Please enter number 9 to check trusted feedbacks");
 			System.out.println("If you want to exist, enter number 10");
@@ -405,7 +405,7 @@ public class Driver {
 			System.out.println("Please input the value you want to update here");
 			String value = sc.nextLine();
 			TH th = new TH();
-			boolean check = th.updateTH(login,h_id, field, value, c.stmt);
+			boolean check = th.updateTH(login, h_id, field, value, c.stmt);
 			if (check) {
 				System.out.println("TH updated");
 				break;
@@ -431,9 +431,10 @@ public class Driver {
 		Scanner sc = new Scanner(System.in);
 		while (true) {
 			System.out.println("Please input your requirements here, input q when you done");
-			System.out.println("Input the field you want to constraint");
+			System.out.println("Input the field you want to constraint\n"
+					+ "(category,address,price,name,telephone,keyword,City,State)");
 			String field = sc.nextLine();
-			if (field.equals("q")) {
+			if (field.equalsIgnoreCase("q")) {
 				break;
 			}
 			if (field.equalsIgnoreCase("price")) {
@@ -454,32 +455,33 @@ public class Driver {
 					continue;
 				}
 			}
-			System.out.println("Input the value you want to constraint");
-			String value = sc.nextLine();
+			String value = "";
+			if (!field.equalsIgnoreCase("price")) {
+				System.out.println("Input the value you want to constraint");
+				value = sc.nextLine();
+			}
 			System.out.println("Sort by price(put p), by rating(put s)," + " by trusted user's rating(put st)");
 			String sort = sc.nextLine();
-			System.out.println("put ASC for acending order, DESC for descending order");
+			System.out.println("Put ASC for ascending order, DESC for descending order");
 			String order = sc.nextLine();
 
 			TH th = new TH();
 			recevier = th.filter(field, min, max, value, sort, order, con.stmt);
 			if (result.isEmpty()) {
 				result = new ArrayList<String>(recevier);
-				break;
+				continue;
 			}
-			for (String s : recevier)
-				System.out.println(s);
 
-			for (String s : result) {
-				if (!recevier.contains(s)) {
-					result.remove(s);
+			for (int j = 0; j < result.size(); j++) {
+				if (!recevier.contains(result.get(j))) {
+					result.remove(result.get(j));
 				}
 			}
-
 		}
+		System.out.println(
+				"\nh_id\tcategory\taddress\tcity\tstate\tprice\tname\ttelephone\tkeyword\t" + "yearbuilt\turl\n");
 		for (String s : result) {
 			System.out.println(s);
-			System.out.println("herererere");
 		}
 
 		//
@@ -593,63 +595,70 @@ public class Driver {
 		if (limit != -1 && !amount.equals("ALL")) {
 			amount = String.valueOf(limit);
 		}
-		System.out.println("Please enter 1 to browse the most popular TH by category");
-		System.out.println("Please enter 2 to browse the most expensive TH by category");
-		System.out.println("Please enter 3 to browse the highest rated TH by category");
-		System.out.println("Please enter 4 to exist");
-		System.out.println("Please enter make your selction");
+		boolean ex = false;
 		while (true) {
-			selectionSt = sc.nextLine();
-			try {
-				selection = Integer.parseInt(selectionSt);
-			} catch (NumberFormatException e) {
-				System.err.println("Please enter a valid number to continue");
-				continue;
-			}
-			if (selectionSt.length() == 0 || selection < 1 || selection > 4) {
-				System.out.println("Please enter a valid number to continue");
-				continue;
-			} else
+			if (ex == true)
 				break;
-		}
-		// if (limit == -1 && amount.equals("ALL")) {
-		int count = 1;
-		switch (selection) {
-		case 1:
-			infoList = t.getPopularTHs(amount, con.stmt);
-			System.out.println("All the most popular THs by category are shown below: " + "\n");
-			for (String[] s : infoList) {
-				System.out.println("Num " + count + ". TH Name - " + s[1] + " |**| Category - " + s[2]
-						+ " |**| VisitCount - " + s[3]);
-				count++;
+			System.out.println("Please enter 1 to browse the most popular TH by category");
+			System.out.println("Please enter 2 to browse the most expensive TH by category");
+			System.out.println("Please enter 3 to browse the highest rated TH by category");
+			System.out.println("Please enter 4 to exist");
+			System.out.println("Please enter make your selction");
+			while (true) {
+				selectionSt = sc.nextLine();
+				try {
+					selection = Integer.parseInt(selectionSt);
+				} catch (NumberFormatException e) {
+					System.err.println("Please enter a valid number to continue");
+					continue;
+				}
+				if (selectionSt.length() == 0 || selection < 1 || selection > 4) {
+					System.out.println("Please enter a valid number to continue");
+					continue;
+				} else
+					break;
 			}
-			System.out.println("\n");
-			break;
-		case 2:
-			infoList = t.getMostExpensiveTHs(amount, con.stmt);
-			System.out.println("All the most expensive THs by category are shown below: " + "\n");
-			for (String[] s : infoList) {
-				System.out.println("Num " + count + ". TH Name - " + s[0] + " |**| Category - " + s[1]
-						+ " |**| AverageCost - " + s[2]);
-				count++;
-			}
-			System.out.println("\n");
-			break;
+			// if (limit == -1 && amount.equals("ALL")) {
+			int count = 1;
+			switch (selection) {
+			case 1:
+				infoList = t.getPopularTHs(amount, con.stmt);
+				System.out.println("All the most popular THs by category are shown below: " + "\n");
+				for (String[] s : infoList) {
+					System.out.println("Num " + count + ". TH Name - " + s[1] + " |**| Category - " + s[2]
+							+ " |**| VisitCount - " + s[3]);
+					count++;
+				}
+				System.out.println("\n");
+				break;
+			case 2:
+				infoList = t.getMostExpensiveTHs(amount, con.stmt);
+				System.out.println("All the most expensive THs by category are shown below: " + "\n");
+				for (String[] s : infoList) {
+					System.out.println("Num " + count + ". TH Name - " + s[0] + " |**| Category - " + s[1]
+							+ " |**| AverageCost - " + s[2]);
+					count++;
+				}
+				System.out.println("\n");
+				break;
 
-		case 3:
-			infoList = t.getHighestRate(amount, con.stmt);
-			System.out.println("All the highest rated THs by category are shown below: " + "\n");
-			for (String[] s : infoList) {
-				System.out.println("Num " + count + ". TH Name - " + s[0] + " |**| Category - " + s[1]
-						+ " |**| AverageRate - " + s[2]);
-				count++;
-			}
-			System.out.println("\n");
-			break;
+			case 3:
+				infoList = t.getHighestRate(amount, con.stmt);
+				System.out.println("All the highest rated THs by category are shown below: " + "\n");
+				for (String[] s : infoList) {
+					System.out.println("Num " + count + ". TH Name - " + s[0] + " |**| Category - " + s[1]
+							+ " |**| AverageRate - " + s[2]);
+					count++;
+				}
+				System.out.println("\n");
+				break;
 
-		case 4:
-		default:
-			break;
+			case 4:
+				ex = true;
+				break;
+			default:
+				break;
+			}
 		}
 
 	}
@@ -658,102 +667,111 @@ public class Driver {
 		Scanner sc = new Scanner(System.in);
 		Favorites fv = new Favorites();
 		String answer, fvTH;
-		ArrayList<String[]> isfvExists = fv.getFavorite(login, con.stmt);
-		if (isfvExists.size() == 0) {
-			System.out.println("You have not set any TH as your favorite yet, do you want to set it right now?"
-					+ " Please type Y or N");
-			while (true) {
-				answer = sc.nextLine();
-				if (answer.length() == 0 || (!answer.equalsIgnoreCase("Y") && !answer.equalsIgnoreCase("N"))) {
-					System.out.println("Please enter a valid answer");
-					continue;
-				} else
-					break;
-			}
-			if (answer.equalsIgnoreCase("Y")) {
-				System.out.println("Please type your favorite TH: ");
+		ArrayList<String[]> isfvExists = null;
+		while (true) {
+			isfvExists = fv.getFavorite(login, con.stmt);
+			if (isfvExists.size() == 0) {
+				System.out.println("You have not set any TH as your favorite yet, do you want to set it right now?"
+						+ " Please type Y or N");
 				while (true) {
-					fvTH = sc.nextLine();
-					if (fvTH.length() == 0) {
-						System.out.println("No empty TH name is allowed");
+					answer = sc.nextLine();
+					if (answer.length() == 0 || (!answer.equalsIgnoreCase("Y") && !answer.equalsIgnoreCase("N"))) {
+						System.out.println("Please enter a valid answer");
 						continue;
 					} else
 						break;
 				}
+				if (answer.equalsIgnoreCase("Y")) {
+					System.out.println("Please type your favorite TH: ");
+					while (true) {
+						fvTH = sc.nextLine();
+						if (fvTH.length() == 0) {
+							System.out.println("No empty TH name is allowed");
+							continue;
+						} else
+							break;
+					}
 
-				if (fv.addFavorite(login, fvTH, con.stmt)) {
-					System.out.println("Your favorite TH has been recorded");
+					if (fv.addFavorite(login, fvTH, con.stmt)) {
+						System.out.println("Your favorite TH has been recorded");
+						break;
+					} else {
+						System.out.println("Failed to record your favorite, please try again");
+						continue;
+					}
 				} else {
-					System.out.println("Failed to record your favorite, please try again");
+					break;
 				}
 			} else {
-				return;
-			}
-		} else {
-			String changeName, hid, selection;
-			int count = 1;
-			int sel;
-			System.out.println(
-					"We found that you have some favorite records, " + "we have shown them for you below: " + "\n");
-			for (String[] s : isfvExists) {
-				System.out.println("Num " + count + ". TH ID - " + s[0] + " |**| TH Name - " + s[1]);
-			}
-			System.out.println(
-					"\nDo you want to add or remove favorite? Type 1 to add new favorite and type 2 to delete exist favorite. Press q to quit");
-			while (true) {
-				selection = sc.nextLine();
-				if (selection.equalsIgnoreCase("q"))
-					return;
-				try {
-					sel = Integer.parseInt(selection);
-				} catch (NumberFormatException e) {
-					System.err.println("Please enter a valid selection");
-					continue;
+				String changeName, hid, selection;
+				int count = 1;
+				int sel;
+				System.out.println(
+						"We found that you have some favorite records, " + "we have shown them for you below: " + "\n");
+				for (String[] s : isfvExists) {
+					System.out.println("Num " + count + ". TH ID - " + s[0] + " |**| TH Name - " + s[1]);
 				}
-				if (selection.length() == 0 || sel > 2 || sel < 1) {
-					System.out.println("Please enter a valid selection");
-					continue;
-				} else
+				System.out.println(
+						"\nDo you want to add or remove favorite? Type 1 to add new favorite and type 2 to delete exist favorite. Press q to quit");
+				while (true) {
+					selection = sc.nextLine();
+					if (selection.equalsIgnoreCase("q"))
+						return;
+					try {
+						sel = Integer.parseInt(selection);
+					} catch (NumberFormatException e) {
+						System.err.println("Please enter a valid selection");
+						continue;
+					}
+					if (selection.length() == 0 || sel > 2 || sel < 1) {
+						System.out.println("Please enter a valid selection");
+						continue;
+					} else
+						break;
+				}
+				switch (sel) {
+				case 1:
+					System.out.println("Please type your favorite TH to add: ");
+					while (true) {
+						changeName = sc.nextLine();
+						if (changeName.length() == 0) {
+							System.out.println("No empty TH name is allowed");
+							continue;
+						} else
+							break;
+					}
+
+					if (fv.addFavorite(login, changeName, con.stmt)) {
+						System.out.println("Your favorite TH has been recorded");
+						break;
+					} else {
+						System.out.println("Failed to record your favorite, please try again");
+						continue;
+					}
+					// break;
+				case 2:
+					System.out.println("Please type the TH id to delete: ");
+					while (true) {
+						hid = sc.nextLine();
+						if (hid.length() == 0) {
+							System.out.println("No empty TH name is allowed");
+							continue;
+						} else
+							break;
+					}
+					if (fv.delete(login, hid, con.stmt)) {
+						System.out.println("Your favorite TH has been deleted");
+
+					} else {
+						System.out.println("Failed to record your favorite, please try again");
+						continue;
+					}
 					break;
-			}
-			switch (sel) {
-			case 1:
-				System.out.println("Please type your favorite TH to add: ");
-				while (true) {
-					changeName = sc.nextLine();
-					if (changeName.length() == 0) {
-						System.out.println("No empty TH name is allowed");
-						continue;
-					} else
-						break;
+				default:
+					break;
 				}
 
-				if (fv.addFavorite(login, changeName, con.stmt)) {
-					System.out.println("Your favorite TH has been recorded");
-				} else {
-					System.out.println("Failed to record your favorite, please try again");
-				}
-				break;
-			case 2:
-				System.out.println("Please type the TH id to delete: ");
-				while (true) {
-					hid = sc.nextLine();
-					if (hid.length() == 0) {
-						System.out.println("No empty TH name is allowed");
-						continue;
-					} else
-						break;
-				}
-				if (fv.delete(login, hid, con.stmt)) {
-					System.out.println("Your favorite TH has been recorded");
-				} else {
-					System.out.println("Failed to record your favorite, please try again");
-				}
-				break;
-			default:
-				break;
 			}
-
 		}
 
 	}
@@ -786,13 +804,15 @@ public class Driver {
 
 	private static void reserve(Connector c) {
 		Scanner sc = new Scanner(System.in);
-		Date from = new Date();
-		Date to = new Date();
+		java.util.Date from = new Date();
+		java.util.Date to = new Date();
+		java.sql.Date sqlfrom = null;
+		java.sql.Date sqlto = null;
 		int h_id = 0;
 		while (true) {
-			System.out.println("Please input t_id you want to reserve, press q to quit");
+			System.out.println("Please input h_id you want to reserve, press q to quit");
 			String h_idstr = sc.nextLine();
-			if (h_idstr.equals("q")) {
+			if (h_idstr.equalsIgnoreCase("q")) {
 				break;
 			}
 			try {
@@ -801,42 +821,74 @@ public class Driver {
 				System.out.println("Please input valid number");
 				continue;
 			}
-			System.out.println("Please input date you want to check in dd-MM-yyyy format"); ///////////
-			DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+			System.out.println("Please input date you want to check in MM-dd-yyyy format"); ///////////
+			DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
 			String fromstr = sc.nextLine();
 
 			try {
 				from = df.parse(fromstr);
+				sqlfrom = new java.sql.Date(from.getTime());
 			} catch (Exception e) {
 				System.out.println("Please input valid date format");
 				continue;
 			}
-			System.out.println("Please input date you want to check out mm/dd/yyyy format");
+			System.out.println("Please input date you want to check out MM-dd-yyyy format");
 			String tostr = sc.nextLine();
 
 			try {
 				to = df.parse(tostr);
+				sqlto = new java.sql.Date(to.getTime());
 			} catch (Exception e) {
 				System.out.println("Please input valid date format");
 				continue;
 			}
 			System.out.println("Are you confirm to reserve? y for yes, n for no");
 			String confirm = sc.nextLine();
-			if (confirm.equalsIgnoreCase("y")) {
+			if (confirm.equalsIgnoreCase("n")) {
 				continue;
 			}
 			Period p = new Period();
-			int p_id = p.getP_id(from, to, c.stmt);
+			int p_id = p.getP_id(sqlfrom, sqlto, c.stmt);
 			Available a = new Available();
-			String price_per_nightstr = a.getAvilable(h_id, p_id, c.stmt).get(0).split("\t")[2];
+
+			ArrayList<String> arr = a.getAvilable(h_id, 50, c.stmt);
+			if (arr.size() == 0) {
+				System.out.println("Time is not available");
+				continue;
+			}
+			String price_per_nightstr = arr.get(0).split("\t")[2];
 			double price_per_night = Double.parseDouble(price_per_nightstr);
 			long diff = to.getTime() - from.getTime();
 			int days = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+			if (days == 0) {
+				days = 1;
+			}
 			Reserve r = new Reserve();
 			Date now = new Date();
-			boolean check = r.addReserve(login, h_id, (int) (days * price_per_night), from, to, now, c.stmt);
+			java.sql.Date sqlnow = new java.sql.Date(now.getTime());
+
+			boolean check = r.addReserve(login, h_id, (int) (days * price_per_night), sqlfrom, sqlto, sqlnow, c.stmt);
 			if (check) {
-				System.out.println("Congratulations you have successfully reserve " + h_id);
+				System.out.println("Congratulations you have successfully reserve a TH");
+				TH th = new TH();
+				System.out.println("Do you want more suggestions for your next booking? Please type y/n");
+				String ans = sc.nextLine();
+				if (ans.equalsIgnoreCase("n")) {
+					break;
+				} else {
+					int count = 1;
+					ArrayList<String[]> temp = new ArrayList<String[]>();
+					System.out.println(
+							"How many suggestions you would like to see? Please type \"ALL\" or a numeric value (ie. 5");
+					String amount = sc.nextLine();
+					temp = th.getSuggestion(login, h_id, amount, c.stmt);
+					for (String[] s : temp) {
+						System.out.println("Num" + count + ". TH - ID: " + s[0] + " |**| TH Name: " + s[1]
+								+ " |**| Category:" + s[2]);
+						count++;
+					}
+				}
+
 			} else {
 				System.out.println("oooops, seems something going wrong, please check your input");
 				continue;
@@ -851,30 +903,35 @@ public class Driver {
 		while (true) {
 			System.out.println("Please input h_id you want to give feedback, press q to quit");
 			String h_idstr = sc.nextLine();
-			if (h_idstr.equals("q")) {
+			if (h_idstr.equalsIgnoreCase("q")) {
 				break;
 			}
 			int h_id = 0;
 			try {
 				h_id = Integer.parseInt(h_idstr);
+
 			} catch (Exception e) {
 				System.out.println("Please input valid number");
 				continue;
 			}
-			System.out.println("Please input your text feedback");
+			System.out.println("Please input your text feedback (100 words max)");
 			String text = sc.nextLine();
-			System.out.println("Please input your score");
+			System.out.println("Please input your score (0-10)");
 			String scorestr = sc.nextLine();
 			int score = -1;
 			try {
 				score = Integer.parseInt(scorestr);
+				if (score > 10 || score < 0) {
+					System.out.println("Please input valid number");
+					continue;
+				}
 			} catch (Exception e) {
 				System.out.println("Please input valid number");
 				continue;
 			}
 			Feedback f = new Feedback();
 			java.sql.Date sqlStartDate = new java.sql.Date(new Date().getTime());
-			boolean check = f.giveFeedback(h_id, h_idstr, text, score, sqlStartDate, c.stmt);
+			boolean check = f.giveFeedback(h_id, login, text, score, sqlStartDate, c.stmt);
 			if (check) {
 				System.out.println("You successfully gave feedback");
 				break;
@@ -891,7 +948,7 @@ public class Driver {
 		while (true) {
 			System.out.println("Please input f_id you want to give feedback, press q to quit");
 			String f_idstr = sc.nextLine();
-			if (f_idstr.equals("q")) {
+			if (f_idstr.equalsIgnoreCase("q")) {
 				break;
 			}
 			int f_id = 0;
@@ -912,7 +969,7 @@ public class Driver {
 				continue;
 			}
 			Feedback f = new Feedback();
-			boolean check = f.rateFeedback(f_idstr, f_id, rating, c.stmt);
+			boolean check = f.rateFeedback(login, f_id, rating, c.stmt);
 			if (check) {
 				System.out.println("You successfully gave rating");
 				break;
@@ -930,7 +987,7 @@ public class Driver {
 		while (true) {
 			System.out.println("Please input h_id you want to check, press q to quit");
 			String h_idstr = sc.nextLine();
-			if (h_idstr.equals("q")) {
+			if (h_idstr.equalsIgnoreCase("q")) {
 				break;
 			}
 			int h_id = 0;
@@ -940,7 +997,7 @@ public class Driver {
 				System.out.println("Please input valid number");
 				continue;
 			}
-			System.out.println("Please input amount you want to limit, ALL for all feedbacks, press q to quit");
+			System.out.println("Please input amount you want to limit, ALL for all feedbacks");
 			String amount = sc.nextLine();
 			if (!amount.equalsIgnoreCase("ALL")) {
 				try {
@@ -949,10 +1006,12 @@ public class Driver {
 					System.out.println("Please input valid number");
 					continue;
 				}
-				Feedback f = new Feedback();
-				result = f.getTHFeedback(h_id, amount, c.stmt);
-				break;
 			}
+
+			Feedback f = new Feedback();
+			result = f.getTHFeedback(h_id, amount, c.stmt);
+			break;
+
 		}
 
 		return result;
@@ -964,7 +1023,7 @@ public class Driver {
 		while (true) {
 			System.out.println("Please input h_id you want to check, press q to quit");
 			String h_idstr = sc.nextLine();
-			if (h_idstr.equals("q")) {
+			if (h_idstr.equalsIgnoreCase("q")) {
 				break;
 			}
 			int h_id = 0;
@@ -976,7 +1035,8 @@ public class Driver {
 			}
 			System.out.println("Please input amount you want to limit, ALL for all feedbacks, press q to quit");
 			String amount = sc.nextLine();
-			if(amount.equalsIgnoreCase("q")) break;
+			if (amount.equalsIgnoreCase("q"))
+				break;
 			else if (!amount.equalsIgnoreCase("ALL")) {
 				try {
 					Integer.parseInt(amount);
@@ -996,9 +1056,9 @@ public class Driver {
 	private static void setTrust(Connector c) {
 		Scanner sc = new Scanner(System.in);
 		while (true) {
-			System.out.println("Please input user that you want to trust/untrust, input q for quit");
+			System.out.println("Please input user login that you want to trust/untrust, input q for quit");
 			String login2 = sc.nextLine();
-			if (login2.equals("q")) {
+			if (login2.equalsIgnoreCase("q")) {
 				break;
 			}
 			if (login.equals(login2)) {
@@ -1018,6 +1078,7 @@ public class Driver {
 			}
 			Users u = new Users();
 			u.trustRecording(login, login2, f, c.stmt);
+			System.out.println("Success");
 			break;
 		}
 
@@ -1025,22 +1086,25 @@ public class Driver {
 
 	private static void visit(Connector c) {
 		Scanner sc = new Scanner(System.in);
+		java.sql.Date sqlfrom = null;
+		java.sql.Date sqlto = null;
+		java.util.Date from;
+		java.util.Date ro;
 		while (true) {
-			System.out.println("Please input date that you check in, press q to quit");
+			System.out.println("Please input date that you check in MM-dd-yyyy format, press q to quit");
 			String fromstr = sc.nextLine();
-			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-			if (fromstr.equals("q")) {
+			DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+			if (fromstr.equalsIgnoreCase("q")) {
 				break;
 			}
-			fromstr = sc.nextLine();
-			Date from = new Date();
+			from = new Date();
 			try {
 				from = df.parse(fromstr);
 			} catch (Exception e) {
 				System.out.println("Please input valid date format");
 				continue;
 			}
-			System.out.println("Please input date you want to check out mm/dd/yyyy format");
+			System.out.println("Please input date you checked out in MM-dd-yyyy format");
 			String tostr = sc.nextLine();
 			Date to = new Date();
 			try {
@@ -1061,11 +1125,13 @@ public class Driver {
 
 			System.out.println("Are you confirm to add visit? y for yes, n for no");
 			String confirm = sc.nextLine();
-			if (confirm.equalsIgnoreCase("y")) {
+			if (confirm.equalsIgnoreCase("n")) {
 				continue;
 			}
+			sqlfrom = new java.sql.Date(from.getTime());
+			sqlto = new java.sql.Date(to.getTime());
 			Visit v = new Visit();
-			boolean check = v.addVisit(from, to, r_id, c.stmt);
+			boolean check = v.addVisit(sqlfrom, sqlto, r_id, c.stmt);
 			if (check) {
 				System.out.println("You successfully add visit");
 				break;
@@ -1079,10 +1145,12 @@ public class Driver {
 
 	private static void addPeriod(Connector c) {
 		Scanner sc = new Scanner(System.in);
+		java.util.Date from = new Date();
+		java.util.Date to = new Date();
 		while (true) {
 			System.out.println("Please input h_id you want to add period, press q to quit");
 			String h_idstr = sc.nextLine();
-			if (h_idstr.equals("q")) {
+			if (h_idstr.equalsIgnoreCase("q")) {
 				break;
 			}
 			int h_id = 0;
@@ -1092,20 +1160,19 @@ public class Driver {
 				System.out.println("Please input valid number");
 				continue;
 			}
-			System.out.println("Please input date that you check in");
+			System.out.println("Please input date that you available from in MM-dd-yyyy format");
 			String fromstr = sc.nextLine();
-			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-			fromstr = sc.nextLine();
-			Date from = new Date();
+			DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+		
 			try {
 				from = df.parse(fromstr);
 			} catch (Exception e) {
 				System.out.println("Please input valid date format");
 				continue;
 			}
-			System.out.println("Please input date you want to check out mm/dd/yyyy format");
+			System.out.println("Please input date you available to in Mm-dd-yyyy format");
 			String tostr = sc.nextLine();
-			Date to = new Date();
+			
 			try {
 				to = df.parse(tostr);
 			} catch (Exception e) {
@@ -1113,12 +1180,15 @@ public class Driver {
 				continue;
 			}
 			Period p = new Period();
-			p.addPeriod(from, to, c.stmt);
-			int pid = p.getP_id(from, to, c.stmt);
+			java.sql.Date sqlfrom = new java.sql.Date(from.getTime());
+			java.sql.Date sqlto = new java.sql.Date(to.getTime());
+			p.addPeriod(sqlfrom, sqlto, c.stmt);
+			int pid = p.getP_id(sqlfrom, sqlto, c.stmt);
 			Available a = new Available();
 			TH th = new TH();
-			String price = th.filter("h_id", 0, 0, h_id + "", "p", "DESC", c.stmt).get(0).split("\t")[6];
-			boolean check = a.addAvilable(h_id, pid, Double.parseDouble(price), c.stmt);
+			String price = th.filter("h_id", 0, 0, h_id + "", "p", "DESC", c.stmt).get(0).split("\t")[5];
+		
+			boolean check = a.addAvilable(login,h_id, pid, Double.parseDouble(price), c.stmt);
 			if (check) {
 				System.out.println("You successfully add Period");
 				break;
@@ -1146,7 +1216,8 @@ public class Driver {
 		while (true) {
 			System.out.println("Please input amount you want to limit, ALL for all feedbacks, press q to quit");
 			String amount = sc.nextLine();
-			if(amount.equalsIgnoreCase("q")) break;
+			if (amount.equalsIgnoreCase("q"))
+				break;
 			else if (!amount.equalsIgnoreCase("ALL")) {
 				try {
 					Integer.parseInt(amount);
@@ -1166,7 +1237,7 @@ public class Driver {
 		}
 
 		for (String[] s : result) {
-			System.out.println("name: " + s[0] + " login " + s[1] + " total trust " + s[2]);
+			System.out.println("Username: " + s[0] + " login: " + s[1] + " total trust: " + s[2]);
 		}
 	}
 

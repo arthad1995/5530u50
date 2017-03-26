@@ -11,7 +11,13 @@ public class Period {
 
 	/** good check, mod try */
 	public void addPeriod(Date from, Date to, Statement st) {
+		int id = getVid(from, to, st);
+		if(id!=-1){
+			System.out.println("Period already exist, and here is your p_id: "+ id);
+			return;
+		}
 		String sql = "insert into Period (Period.from, Period.to) Values ('" + from + "', '" + to + "');";
+		
 		// System.out.println(sql);
 		try {
 			st.executeUpdate(sql);
@@ -23,7 +29,24 @@ public class Period {
 		}
 
 	}
-
+ private int getVid(Date from, Date to, Statement st){
+	 int result = -1;
+	 String sql = "SELECT Period.p_id from Period where Period.from = '" + from + "' and Period.to = '" +
+			 		to + "'";
+		ResultSet rs = null;
+		try {
+			rs = st.executeQuery(sql);
+			while (rs.next()) {
+				result = rs.getInt("p_id");
+			}
+			
+			}
+		catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}  
+	 
+	 return result;
+ }
 	//good check
 	public ArrayList<Date[]> getPeriod(int p_id, Statement st) {
 		Date[] period;
